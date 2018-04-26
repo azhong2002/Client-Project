@@ -1,9 +1,11 @@
-package source;
+package tests;
 
 //FireflySMCS2020 Andrew Zhong 4/25/18 
 //Test email program, fill in recipients and senders
 
+import java.io.IOException;
 import java.util.*;
+
 import javax.mail.*;
 import javax.mail.internet.*;
 import javax.activation.*;
@@ -18,17 +20,36 @@ public class EmailTest {
 		prop.put("mail.smtp.auth", true);
 		
 		Session s = Session.getDefaultInstance(prop, 
-				new javax.mail.Authenticator() {  			//password authentication
+				new javax.mail.Authenticator() {  								//password authentication
 				protected PasswordAuthentication getPasswordAuthentication() {  
-					return new PasswordAuthentication("sender@email.com", "password");  
+					return new PasswordAuthentication("fireflySMCS2020@gmail.com", "lightningbug");  
 				}  
 		});
 		MimeMessage msg = new MimeMessage(s);
+		Multipart multipart = new MimeMultipart();
+		
 		try{
-				msg.addRecipient(Message.RecipientType.TO, new InternetAddress("recipient@email.com"));
-				msg.setFrom(new InternetAddress("sender@email.com"));
+				msg.addRecipient(Message.RecipientType.TO, new InternetAddress("fireflySMCS2020@gmail.com"));
+				msg.setFrom(new InternetAddress("fireflySMCS2020@gmail.com"));
 				msg.setSubject("Test Email");
-				msg.setText("This is a test text email");
+				
+				MimeBodyPart msgBody = new MimeBodyPart();	//Add body message bodypart
+				msgBody.setContent("This is a test email with attachment", "text/html");
+				multipart.addBodyPart(msgBody);
+				
+				String filePath = "README.txt";
+				
+				MimeBodyPart attachPart = new MimeBodyPart();	//Add attatchment bodypart
+                try {
+                    attachPart.attachFile(filePath);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                multipart.addBodyPart(attachPart);
+				
+                msg.setContent(multipart);
+				//msg.setText("This is a test email with attachment");
+                
 				System.out.println("sending email");
 				long start = System.nanoTime();
 				Transport.send(msg);
