@@ -3,14 +3,43 @@ package tests;
 //FireflySMCS2020 Andrew Zhong 4/25/18 
 //Test email program, fill in recipients and senders
 
+import java.awt.BorderLayout;
+import java.awt.event.*;
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
 import javax.mail.*;
 import javax.mail.internet.*;
 import javax.activation.*;
+import javax.swing.*;
 
-public class EmailTest {
+public class EmailTest extends JPanel implements ActionListener{
+	
+	JFileChooser fc;
+	JButton openBtn;
+	String file;
+	
+	
+	public EmailTest(){
+		fc = new JFileChooser();
+		openBtn = new JButton("Open a File...");
+		openBtn.addActionListener(this);
+		
+		JPanel buttonPanel = new JPanel();
+        buttonPanel.add(openBtn);
+        
+        add(buttonPanel, BorderLayout.PAGE_START);
+	}
+	
+	public void actionPerformed(ActionEvent e){
+		if(e.getSource() == openBtn){
+			int returnVal = fc.showSaveDialog(EmailTest.this);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+                file = fc.getSelectedFile().getPath();
+			}
+		}
+	}
 
 	public static void main(String[] args) {
 		Properties prop = new Properties();
@@ -37,7 +66,7 @@ public class EmailTest {
 				msgBody.setContent("This is a test email with attachment", "text/html");
 				multipart.addBodyPart(msgBody);
 				
-				String filePath = "README.txt";
+				String filePath = "README.txt";	//filepath set as default
 				
 				MimeBodyPart attachPart = new MimeBodyPart();	//Add attatchment bodypart
                 try {
