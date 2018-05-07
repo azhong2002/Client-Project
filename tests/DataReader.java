@@ -35,14 +35,26 @@ public class DataReader {
 		
 		Collections.sort(exams, (String[] item1, String[] item2) -> item1[3].compareTo(item2[3]));	//sort by teacher
 		
+		ArrayList<String[]> noTeach = new ArrayList<String[]>();
+		
 		for(int ind = 0; ind < exams.size(); ind++) {	//move items to corresponding to Teacher object's array
-			int lastSame = ind;						
-			while(lastSame < exams.size() && exams.get(lastSame)[3].equals(exams.get(ind)[3])) {	//goes to last item with this teacher
+			int lastSame = ind;			
+			String name = exams.get(ind)[3];
+			while(lastSame < exams.size() && exams.get(lastSame)[3].equals(name)) {	//goes to last item with this teacher
 				lastSame++;
 			}
-			teachList.add(new Teacher(new ArrayList<String[]>(exams.subList(ind, lastSame))));	//make new Teacher object
+			if(name.length() >= 10 && name.substring(0,10).equals("No Teacher")){	//if no teacher
+				noTeach.addAll(new ArrayList<String[]>(exams.subList(ind, lastSame)));
+			} 
+			else{
+				teachList.add(new Teacher(new ArrayList<String[]>(exams.subList(ind, lastSame))));	//make new Teacher object
+			}
+			
 			ind = lastSame;
 		}
+		
+		teachList.add(new Teacher(noTeach));
+		Collections.sort(teachList, (Teacher t1, Teacher t2) -> t1.name.compareTo(t2.name));	//sort by teacher
 		
 		reader.close();
 		return teachList;
