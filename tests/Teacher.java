@@ -2,6 +2,10 @@ package tests;
 
 import java.util.ArrayList;
 import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.PdfPTable;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class Teacher {
 
@@ -33,7 +37,17 @@ public class Teacher {
 		return name;
 	}
 	
-	public void makePDF(){
+	public void makePDF() throws IOException, DocumentException{
+		String fileName = name + "_AP_Registration";
+		Document doc = new Document();
+		PdfWriter.getInstance(doc, new FileOutputStream(fileName));
+		doc.open();
+		PdfPTable table = new PdfPTable(9);
+		for(int aw = 0; aw < 16; aw++){
+            table.addCell(Integer.toString(aw));
+        }
+		doc.add(table);
+		doc.close();
 		
 	}
 	
