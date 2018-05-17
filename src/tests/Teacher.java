@@ -28,6 +28,10 @@ public class Teacher {
 		}
 	}
 	
+	public void addAll(ArrayList<String[]> newData) {
+		examList.addAll(newData);
+	}
+	
 	public void display() {
 		for(String[] item: examList) {
 			for(String metaTag: item) {
@@ -41,23 +45,32 @@ public class Teacher {
 		return name;
 	}
 	
-	public void makePDF(String path) throws IOException, DocumentException{
+	public String makePDF(String path) throws IOException, DocumentException{
 		Collections.sort(examList, (String[] item1, String[] item2) -> item1[1].compareTo(item2[1]));
 		Collections.sort(examList, (String[] item1, String[] item2) -> item1[2].compareTo(item2[2]));
-		Collections.sort(examList, (String[] item1, String[] item2) -> item1[4].compareTo(item2[4]));
+		Collections.sort(examList, (String[] item1, String[] item2) -> item1[4].compareTo(item2[4]));	//sort by test, period, and name
+																										//in that order
 		String fileName = path + name + "_AP_Registration.pdf";
 		Document doc = new Document();
-		PdfWriter.getInstance(doc, new FileOutputStream(fileName));
+		PdfWriter.getInstance(doc, new FileOutputStream(fileName));	//makes doc to edit
 		doc.open();
+		
+		Font font = new Font();
+		font.setSize(12);
 		PdfPTable table = new PdfPTable(6);
-		for(String[] item : examList){
+		table.setWidthPercentage(100);
+		table.setWidths(new float[] { 5, 18, 2, 10, 10, 3});
+		for(String[] item : examList){	//Adds all exam items as rows of their data
 			for(String data : item) {
-				table.addCell(data);
+				table.addCell(new Paragraph(data,font));
 			}
-            table.completeRow();
+            table.completeRow();	//go to new row
         }
+		
 		doc.add(table);
 		doc.close();
+		
+		return fileName;
 		
 	}
 	

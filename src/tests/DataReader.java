@@ -69,16 +69,17 @@ public class DataReader {
 
 	public static void main(String[] args) {
 		ArrayList<Teacher> teachers = readData("test_data.mer");
-		try{
-			teachers.get(0).makePDF("");
+		for(Teacher t : teachers) {
+			try{
+				System.out.println(t.makePDF(""));
+			}
+			catch(IOException e) {
+				System.out.println("IO e");
+			}
+			catch(DocumentException e) {
+				System.out.println("Doc e");
+			}
 		}
-		catch(IOException e) {
-			System.out.println("IO e");
-		}
-		catch(DocumentException e) {
-			System.out.println("Doc e");
-		}
-
 	}
 
 }
