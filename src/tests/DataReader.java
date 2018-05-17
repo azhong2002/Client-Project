@@ -3,8 +3,12 @@ package tests;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
+
+import com.itextpdf.text.DocumentException;
+
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 //Andrew Zhong 5/6/18 Client Project Testing
 //Reads MER spreadsheet file and creates PDF
@@ -15,7 +19,7 @@ public class DataReader {
 	public DataReader() {
 	}
 	
-	public ArrayList<Teacher> readData(String fileAddress) {
+	public static ArrayList<Teacher> readData(String fileAddress) {
 		File file = new File(fileAddress);
 		Scanner reader;
 		ArrayList<String[]> exams = new ArrayList<String[]>();	//stores data as arrays in arraylists
@@ -63,12 +67,18 @@ public class DataReader {
 		return teachList;
 	}
 
-/*	public static void main(String[] args) {
+	public static void main(String[] args) {
 		ArrayList<Teacher> teachers = readData("test_data.mer");
-		for(Teacher t: teachers) {
-			System.out.println(t);
+		try{
+			teachers.get(0).makePDF("");
+		}
+		catch(IOException e) {
+			System.out.println("IO e");
+		}
+		catch(DocumentException e) {
+			System.out.println("Doc e");
 		}
 
-	}*/
+	}
 
 }

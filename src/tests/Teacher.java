@@ -1,6 +1,10 @@
 package tests;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -37,14 +41,20 @@ public class Teacher {
 		return name;
 	}
 	
-	public void makePDF() throws IOException, DocumentException{
-		String fileName = name + "_AP_Registration";
+	public void makePDF(String path) throws IOException, DocumentException{
+		Collections.sort(examList, (String[] item1, String[] item2) -> item1[1].compareTo(item2[1]));
+		Collections.sort(examList, (String[] item1, String[] item2) -> item1[2].compareTo(item2[2]));
+		Collections.sort(examList, (String[] item1, String[] item2) -> item1[4].compareTo(item2[4]));
+		String fileName = path + name + "_AP_Registration.pdf";
 		Document doc = new Document();
 		PdfWriter.getInstance(doc, new FileOutputStream(fileName));
 		doc.open();
-		PdfPTable table = new PdfPTable(9);
-		for(int aw = 0; aw < 16; aw++){
-            table.addCell(Integer.toString(aw));
+		PdfPTable table = new PdfPTable(6);
+		for(String[] item : examList){
+			for(String data : item) {
+				table.addCell(data);
+			}
+            table.completeRow();
         }
 		doc.add(table);
 		doc.close();

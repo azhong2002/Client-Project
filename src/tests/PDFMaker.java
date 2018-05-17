@@ -12,7 +12,7 @@ public class PDFMaker {
 	
 	public static void main(String[] args) throws IOException, DocumentException {
 		String name = "Test";
-		String path = "Documents/";
+		String path = "";
 		String fileName = path + name + "_AP_Registration.pdf";
 		Document doc = new Document();
 		PdfWriter.getInstance(doc, new FileOutputStream(fileName));
