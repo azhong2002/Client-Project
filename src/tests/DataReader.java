@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
+import javax.mail.MessagingException;
+
 import com.itextpdf.text.DocumentException;
 
 import java.io.File;
@@ -69,17 +71,24 @@ public class DataReader {
 
 	public static void main(String[] args) {
 		ArrayList<Teacher> teachers = readData("test_data.mer");
-		for(Teacher t : teachers) {
+		//for(Teacher t : teachers) {
 			try{
-				System.out.println(t.makePDF(""));
+				//System.out.println(t.makePDF(""));
+				teachers.get(0).sendEmail("fireflySMCS2020@gmail.com", "lightningbug", "");
 			}
 			catch(IOException e) {
-				System.out.println("IO e");
+				System.out.println("Error creating PDF writer");
+				e.printStackTrace();
 			}
 			catch(DocumentException e) {
-				System.out.println("Doc e");
+				System.out.println("Error creating document");
+				e.printStackTrace();
 			}
-		}
+			catch(MessagingException e) {
+				System.out.println("Messaging error");
+				e.printStackTrace();
+			}
+		//}
 	}
 
 }

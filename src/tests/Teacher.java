@@ -4,12 +4,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Properties;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.PdfPTable;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import javax.mail.*;
+import javax.mail.internet.*;
+import javax.activation.*;
+import javax.swing.*;
 
 public class Teacher {
 
@@ -72,6 +79,51 @@ public class Teacher {
 		
 		return fileName;
 		
+	}
+	
+	public void sendEmail(String user, String pass, String path) throws MessagingException, IOException, DocumentException{
+		Properties prop = new Properties();
+		prop.setProperty("mail.smtp.host", "smtp.gmail.com");	//change accordingly with email service
+		prop.put("mail.smtp.starttls.enable", "true");
+		prop.put("mail.smtp.port", "587");
+		prop.put("mail.smtp.auth", true);
+		
+		Session s = Session.getDefaultInstance(prop, 
+				new javax.mail.Authenticator() {  								//password authentication
+				protected PasswordAuthentication getPasswordAuthentication() {  
+					return new PasswordAuthentication(user, pass);  
+				}  
+		});
+		MimeMessage msg = new MimeMessage(s);
+		Multipart multipart = new MimeMultipart();
+		
+		msg.addRecipient(Message.RecipientType.TO, new InternetAddress("fireflySMCS2020@gmail.com"));
+		msg.setFrom(new InternetAddress(user));
+		msg.setSubject("AP Registration Information");
+		
+		MimeBodyPart msgBody = new MimeBodyPart();	//Add body message bodypart
+		msgBody.setContent("Attached is a PDF containing the AP Registration information for your students.", "text/html");
+		multipart.addBodyPart(msgBody);
+		System.out.println("Text added");
+		
+		String filePath = makePDF(path);	//attach and make PDF file
+		
+		MimeBodyPart attachPart = new MimeBodyPart();	//Add attachment bodypart
+        try {
+            attachPart.attachFile(filePath);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        multipart.addBodyPart(attachPart);
+        System.out.println("PDF attatched");
+		
+        msg.setContent(multipart);
+		//msg.setText("This is a test email with attachment");
+        
+		System.out.println("sending email");
+		long start = System.nanoTime();
+		Transport.send(msg);
+		System.out.printf("Message sent in %f seconds.", (System.nanoTime() - start)/1000000000.0);
 	}
 	
 }
