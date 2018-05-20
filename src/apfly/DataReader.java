@@ -1,4 +1,4 @@
-package tests;
+package apfly;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -71,8 +71,9 @@ public class DataReader {
 
 	public static void main(String[] args) {
 		ArrayList<Teacher> teachers = readData("test_data.mer");
-		//for(Teacher t : teachers) {
-			try{
+		for(Teacher t : teachers) {
+			System.out.println(t.teacherEmail);
+			/*try{
 				//System.out.println(t.makePDF(""));
 				teachers.get(0).sendEmail("fireflySMCS2020@gmail.com", "lightningbug", "");
 			}
@@ -87,8 +88,8 @@ public class DataReader {
 			catch(MessagingException e) {
 				System.out.println("Messaging error");
 				e.printStackTrace();
-			}
-		//}
+			}*/
+		}	
 	}
 
 }
