@@ -73,7 +73,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 		
 	}
 	
-	public void print(String msg) {
+	public void display(String msg) {	//displays to messageboard
 		messages.setText(messages.getText() + "\n" + msg);
 	}
 	
