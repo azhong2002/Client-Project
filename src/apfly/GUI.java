@@ -31,7 +31,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 	private Panel TeacherList = new Panel();
 	
 	//MESSAGES
-	private JTextArea messages = new JTextArea("Messages: \n");
+	private JTextArea messages = new JTextArea("Messages: \n", 15, 30);
 	private JScrollPane msgPanel = new JScrollPane(messages);
 	
 	public GUI(String title) {
@@ -67,10 +67,9 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 		
 		//MESSAGES
 		south.add(msgPanel, BorderLayout.WEST);	//Message panel
-		msgPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		messages.setEditable(false);
-		messages.setPreferredSize(new Dimension(300,300));
-		
+		//messages.setPreferredSize(new Dimension(300,300));
+		msgPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 	}
 	
 	public void display(String msg) {	//displays to messageboard
@@ -79,13 +78,18 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 	
 	public void actionPerformed(ActionEvent e) {
 		Object src = e.getSource();
-		if(src == loginBtn && userIn.getForeground() != Color.gray && passIn.getForeground() != Color.gray) {//sets login info if provided
-			user = userIn.getText();	
-			pass = passIn.getText();
-			passIn.setText("Password");			//resets entry hints
-        	passIn.setForeground(Color.gray);
-        	userIn.setText("Username");
-        	userIn.setForeground(Color.gray);
+		if(src == loginBtn) {//sets login info if provided
+			if(userIn.getForeground() != Color.gray && passIn.getForeground() != Color.gray){
+				user = userIn.getText();	
+				pass = passIn.getText();
+				passIn.setText("Password");			//resets entry hints
+	        	passIn.setForeground(Color.gray);
+	        	userIn.setText("Username");
+	        	userIn.setForeground(Color.gray);
+			}
+			else{
+				display("Please provide a username and password.");
+			}
 		}	
 	}
 	
