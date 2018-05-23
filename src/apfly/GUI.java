@@ -19,7 +19,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 	private Panel login = new Panel();
 	private Panel loginEntries = new Panel();
 	private JTextField userIn = new JTextField("Username");
-	private JTextField passIn = new JTextField("Password");
+	private JPasswordField passIn = new JPasswordField("Password");
 	private JButton loginBtn = new JButton("Set Credentials");
 	String user = "";
 	String pass = "";
@@ -28,7 +28,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 	private Panel fileUpload = new Panel();
 	
 	//TEACHER LIST
-	private Panel TeacherList = new Panel();
+	private JScrollPane TeacherList = new JScrollPane();
 	
 	//MESSAGES
 	private JTextArea messages = new JTextArea("Messages: \n", 15, 30);
@@ -81,11 +81,12 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 		if(src == loginBtn) {//sets login info if provided
 			if(userIn.getForeground() != Color.gray && passIn.getForeground() != Color.gray){
 				user = userIn.getText();	
-				pass = passIn.getText();
+				pass = passIn.getPassword();
 				passIn.setText("Password");			//resets entry hints
 	        	passIn.setForeground(Color.gray);
 	        	userIn.setText("Username");
 	        	userIn.setForeground(Color.gray);
+	        	display("Login credentials for " + user + " set.");
 			}
 			else{
 				display("Please provide a username and password.");
