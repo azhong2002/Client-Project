@@ -93,7 +93,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 		
 		//MESSAGES
 		south.add(msgPanel, BorderLayout.WEST);	//Message panel
-		msgPanel.setPreferredSize(new Dimension(420,300));
+		msgPanel.setPreferredSize(new Dimension(420,500));
 		messages.setEditable(false);
 		msgPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		
@@ -158,21 +158,32 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 			
 		}
 		else if(src == selectAllBtn) {		//select all teachers
-			for(TeacherPanel tPanel: teacherPanelList) {
-				tPanel.check();
+			if(teacherPanelList.size() == 0) {
+				display("Please select a MER file");
+			}
+			else {
+				for(TeacherPanel tPanel: teacherPanelList) {
+					tPanel.check();
+				}
 			}
 		}
 		else if(src == sendBtn) {
-			for(TeacherPanel tPanel: teacherPanelList) {
-				if(tPanel.isChecked()) {	//send emails to all selected teachers
-					try {
-						tPanel.sendEmail(user, pass);
-					}
-					catch(Exception ex) {
-						display("Error sending " + tPanel + "'s message.");
+			if(teacherPanelList.size() == 0) {
+				display("Please select a MER file");
+			}
+			else {
+				for(TeacherPanel tPanel: teacherPanelList) {
+					if(tPanel.isChecked()) {	//send emails to all selected teachers
+						try {
+							tPanel.sendEmail(user, pass);
+						}
+						catch(Exception ex) {
+							display("Error sending " + tPanel + "'s message.");
+						}
 					}
 				}
 			}
+			
 		}
 	}
 	
