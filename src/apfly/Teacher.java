@@ -21,6 +21,7 @@ import javax.mail.internet.*;
 
 public class Teacher {
 
+	public static String defaultEmail = "Debra_L_Dresser@mcpsmd.org";
 	public ArrayList<String[]> examList;
 	public String name = "no_name";
 	public String teacherEmail;	//email address of teacher
@@ -33,7 +34,6 @@ public class Teacher {
 		URL staffDir = new URL("http://www.montgomeryschoolsmd.org/schools/poolesvillehs/staff/directory.aspx");	//TODO customize
         BufferedReader in = new BufferedReader(
         new InputStreamReader(staffDir.openStream()));
-
 
         String source = "";
         String inputLine;
@@ -50,7 +50,7 @@ public class Teacher {
 		name = examList.get(0)[3];
 		if(name.length() >= 10 && name.substring(0,10).equals("No Teacher")){
 			name = "No Teacher";
-			teacherEmail = "Debra_L_Dresser@mcpsmd.org";	//TODO change to customize
+			teacherEmail = defaultEmail;
 		}
 		else {
 			try {
@@ -62,11 +62,21 @@ public class Teacher {
 		}
 	}
 	
-	public void addAll(ArrayList<String[]> newData) {
-		examList.addAll(newData);
+	public void addAll(ArrayList<String[]> newData) {	//adds all new entries
+		for(String[] item: newData) {
+			boolean isNew = true;
+			for(String[] oldItem : examList) {
+				if (item.equals(oldItem)) {
+					isNew = false;
+				}
+			}
+			if(isNew) {
+				examList.add(item);
+			}
+		}
 	}
 	
-	public void display() {
+	public void display() {	//testing purposes only
 		for(String[] item: examList) {
 			for(String metaTag: item) {
 				System.out.print(metaTag + ",");
