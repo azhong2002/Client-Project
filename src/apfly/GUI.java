@@ -5,10 +5,9 @@ package apfly;
 
 import javax.swing.*;
 
-import tests.EmailTest;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Panel;
 import java.awt.event.*;
@@ -23,21 +22,26 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 	//LOGIN
 	private Panel login = new Panel();
 	private Panel loginEntries = new Panel();
-	private JTextField userIn = new JTextField("Username");
-	private JPasswordField passIn = new JPasswordField("Password");
+	private JTextField userIn = new JTextField("Username     ");
+	private JPasswordField passIn = new JPasswordField("Password     ");
 	private JButton loginBtn = new JButton("Set Credentials");
 	String user = "";
 	String pass = "";
 	
 	//FILE UPLOAD
 	private Panel fileUpload = new Panel();
-	private JButton chooseFileBtn = new JButton("Upload a file");
+	private JButton chooseFileBtn = new JButton("Upload MER file");
 	private JFileChooser fc = new JFileChooser();
 	
 	//TEACHER LIST
 	private ArrayList<Teacher> teachList = new ArrayList<Teacher>();
+	ArrayList<TeacherPanel> teacherPanelList = new ArrayList<TeacherPanel>();
 	private JPanel teacherPanelHolder = new JPanel();
 	private JScrollPane teacherViewPane = new JScrollPane(teacherPanelHolder);
+	
+	//SEND OPTIONS
+	private JButton sendBtn = new JButton("Send");
+	private JButton selectAllBtn = new JButton("Select All");
 	
 	//MESSAGES
 	private JTextArea messages = new JTextArea("Messages: \n", 15, 30);
@@ -61,10 +65,12 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 		loginEntries.add(userIn, BorderLayout.NORTH);	//user and pass entries, with gray hint text when nothing entered
 		userIn.setForeground(Color.gray);
 		userIn.addFocusListener(this);
+		userIn.setPreferredSize(new Dimension(150,20));
 		loginEntries.add(passIn, BorderLayout.SOUTH);
 		passIn.setForeground(Color.gray);
 		passIn.addFocusListener(this);
-		passIn.setEchoChar((char) 0);
+		passIn.setPreferredSize(new Dimension(150,20));
+		passIn.setEchoChar((char) 0);	//allows password hint text to be seen
 		
 		login.add(loginBtn, BorderLayout.EAST);	//button to log in
 		loginBtn.addActionListener(this);
@@ -76,21 +82,35 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 		
 		//TEACHERLILST
 		SE.add(teacherViewPane, BorderLayout.NORTH);
-		teacherPanelHolder.setLayout(new GridLayout());
+		teacherViewPane.setPreferredSize(new Dimension(400,300));
+		teacherPanelHolder.setLayout(new GridLayout(0,1));
+		
+		//SEND OPTIONS
+		SE.add(selectAllBtn, BorderLayout.CENTER);
+		selectAllBtn.addActionListener(this);
+		SE.add(sendBtn, BorderLayout.SOUTH);
+		sendBtn.addActionListener(this);
 		
 		//MESSAGES
 		south.add(msgPanel, BorderLayout.WEST);	//Message panel
+		msgPanel.setPreferredSize(new Dimension(420,300));
 		messages.setEditable(false);
-		//messages.setPreferredSize(new Dimension(300,300));
 		msgPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		this.pack();
 	}
 	
 	public void setTeachers(ArrayList<Teacher> teachList) {	//sets teacherpanels when new file is added
-		for (Teacher t: teachList) {
-			teacherPanelHolder.add(new TeacherPanel(t));
+		for(TeacherPanel tP : teacherPanelList) {	//remove previous panels
+			teacherPanelHolder.remove(tP);
 		}
+		teacherPanelList.clear();
+		for (Teacher t: teachList) {
+			TeacherPanel tPanel = new TeacherPanel(t);
+			teacherPanelList.add(tPanel);
+			teacherPanelHolder.add(tPanel);
+		}
+		teacherViewPane.setSize(300,300);
 		this.pack();
 	}
 	
@@ -136,6 +156,23 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
                 display("Added " + file + " to contents.");
 			}
 			
+		}
+		else if(src == selectAllBtn) {		//select all teachers
+			for(TeacherPanel tPanel: teacherPanelList) {
+				tPanel.check();
+			}
+		}
+		else if(src == sendBtn) {
+			for(TeacherPanel tPanel: teacherPanelList) {
+				if(tPanel.isChecked()) {	//send emails to all selected teachers
+					try {
+						tPanel.sendEmail(user, pass);
+					}
+					catch(Exception ex) {
+						display("Error sending " + tPanel + "'s message.");
+					}
+				}
+			}
 		}
 	}
 	
