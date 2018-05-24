@@ -45,7 +45,7 @@ public class Teacher {
         in.close();
 	}
 	
-	public Teacher(ArrayList<String[]> examParam) {
+	public Teacher(ArrayList<String[]> examParam) {	//preconditon examParam has a first element
 		examList = examParam;
 		name = examList.get(0)[3];
 		if(name.length() >= 10 && name.substring(0,10).equals("No Teacher")){
@@ -139,7 +139,7 @@ public class Teacher {
 		msg.setSubject("AP Registration Information");
 		
 		MimeBodyPart msgBody = new MimeBodyPart();	//Add body message bodypart
-		msgBody.setContent("Attached is a PDF containing the AP Registration information for your students. This is a test "
+		msgBody.setContent("Attached is a PDF containing the AP Registration information for your students. This is an automated test "
 				+ "email of APFly, the AP Registration notification app by Firefly Software.", "text/html");
 		multipart.addBodyPart(msgBody);
 		System.out.println("Text added");

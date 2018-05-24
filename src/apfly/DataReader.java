@@ -4,8 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
+import javax.mail.MessagingException;
+
+import com.itextpdf.text.DocumentException;
+
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 //Andrew Zhong 5/6/18 Client Project Testing
 //Reads MER spreadsheet file and creates PDF
@@ -54,19 +59,25 @@ public class DataReader {
 			ind = lastSame;
 		}
 		
-		teachList.add(new Teacher(noTeach));
+		if(noTeach.size() > 0) {
+			teachList.add(new Teacher(noTeach));
+		}
 		Collections.sort(teachList, (Teacher t1, Teacher t2) -> t1.name.compareTo(t2.name));	//sort by teacher
 		
 		reader.close();
+		if(teachList.size() > 0) {
+			System.out.println("empty");
+		}
 		return teachList;
 	}
 
-	/*public static void main(String[] args) {
+	public static void main(String[] args) {		//for testing purposes
 		ArrayList<Teacher> teachers = readData("test_data.mer");
-		for(Teacher t : teachers) {
-			System.out.println(t.teacherEmail);
+		//for(Teacher t : teachers) {
+			//System.out.println(t.teacherEmail);
 			try{
 				//System.out.println(t.makePDF(""));
+				teachers.get(0).teacherEmail = "fireflySMCS2020@gmail.com";
 				teachers.get(0).sendEmail("fireflySMCS2020@gmail.com", "lightningbug", "");
 			}
 			catch(IOException e) {
@@ -81,7 +92,7 @@ public class DataReader {
 				System.out.println("Messaging error");
 				e.printStackTrace();
 			}
-		}	
-	}*/
+		//}	
+	}
 
 }
