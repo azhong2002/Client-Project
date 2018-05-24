@@ -42,8 +42,7 @@ public class TeacherPanel extends JPanel implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == changeEmailBtn) {
-			EmailChangePopup popUp = new EmailChangePopup(teacher);
-			popUp.setVisible(true);
+			
 		}
 		
 	}
