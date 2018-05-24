@@ -4,22 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
-import javax.mail.MessagingException;
-
-import com.itextpdf.text.DocumentException;
-
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 
 //Andrew Zhong 5/6/18 Client Project Testing
 //Reads MER spreadsheet file and creates PDF
 //data expected to be 1 item per line and in the following format: ID,Alpha_name,PD,TCHL,TestName,APExam
 
 public class DataReader {
-	
-	public DataReader() {
-	}
 	
 	public static ArrayList<Teacher> readData(String fileAddress) {
 		File file = new File(fileAddress);
@@ -69,11 +61,11 @@ public class DataReader {
 		return teachList;
 	}
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		ArrayList<Teacher> teachers = readData("test_data.mer");
 		for(Teacher t : teachers) {
 			System.out.println(t.teacherEmail);
-			/*try{
+			try{
 				//System.out.println(t.makePDF(""));
 				teachers.get(0).sendEmail("fireflySMCS2020@gmail.com", "lightningbug", "");
 			}
@@ -88,8 +80,8 @@ public class DataReader {
 			catch(MessagingException e) {
 				System.out.println("Messaging error");
 				e.printStackTrace();
-			}*/
+			}
 		}	
-	}
+	}*/
 
 }
