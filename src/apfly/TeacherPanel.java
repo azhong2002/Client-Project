@@ -62,7 +62,10 @@ public class TeacherPanel extends JPanel implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == changeEmailBtn) {
-			teacher.teacherEmail = JOptionPane.showInputDialog(this,"Change " + teacher + "'s Email");
+			String newMail = JOptionPane.showInputDialog(this,"Change " + teacher + "'s Email");
+			if(newMail.trim().length() > 0) {
+				teacher.teacherEmail = newMail;
+			}
 			emailDisplay.setText(teacher.teacherEmail);
 		}
 		
