@@ -161,7 +161,7 @@ public class Teacher {
 		System.out.println("sending email");
 		long start = System.nanoTime();
 		Transport.send(msg);
-		System.out.printf("Message sent in %f seconds.", (System.nanoTime() - start)/1000000000.0);
+		System.out.printf("Message sent in %f seconds.\n", (System.nanoTime() - start)/1000000000.0);
 	}
 	
 }
