@@ -65,9 +65,6 @@ public class DataReader {
 		Collections.sort(teachList, (Teacher t1, Teacher t2) -> t1.name.compareTo(t2.name));	//sort by teacher
 		
 		reader.close();
-		if(teachList.size() > 0) {
-			System.out.println("empty");
-		}
 		return teachList;
 	}
 
