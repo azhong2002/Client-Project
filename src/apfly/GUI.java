@@ -9,7 +9,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Panel;
+import java.awt.Toolkit;
 import java.awt.event.*;
 import java.util.ArrayList;
 
@@ -97,6 +99,8 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 		messages.setEditable(false);
 		msgPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		
+		setIconImage(Toolkit.getDefaultToolkit().getImage("Logo.png"));
+		
 		this.pack();
 	}
 	
@@ -153,7 +157,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
                 	}
                 }
                 setTeachers(teachList);
-                display("Added " + file + " to contents.");
+                display("Added " + file + " to contents.\n");
 			}
 			
 		}
@@ -175,13 +179,17 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 				for(TeacherPanel tPanel: teacherPanelList) {
 					if(tPanel.isChecked()) {	//send emails to all selected teachers
 						try {
+							double start = System.nanoTime();
 							tPanel.sendEmail(user, pass);
+							display("Emailed " + tPanel + " in " + (System.nanoTime() - start)/1000000000.0 + "seconds.\n");
 						}
 						catch(Exception ex) {
-							display("Error sending " + tPanel + "'s message.");
+							display("Error sending " + tPanel + "'s message.\n");
+							display(ex.getMessage());
 						}
 					}
 				}
+				display("\n");
 			}
 			
 		}
