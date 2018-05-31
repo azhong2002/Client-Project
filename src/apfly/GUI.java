@@ -143,21 +143,18 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 			String file;
 			int returnVal = fc.showOpenDialog(this);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				teachList.clear();
                 file = fc.getSelectedFile().getPath();
                 for(Teacher inp : DataReader.readData(file)) {	//add all new entries for each teacher into list
-                	boolean isNew = true;
                 	for(Teacher t: teachList) {
                 		if (t.name.equals(inp.name)) {
                 			t.addAll(inp.examList);
-                			isNew = false;
                 		}
                 	}
-                	if (isNew) {
-                		teachList.add(inp);
-                	}
+                	teachList.add(inp);
                 }
                 setTeachers(teachList);
-                display("Added " + file + " to contents.\n");
+                display("Retrieved data from " + file + "\n");
 			}
 			
 		}
@@ -204,7 +201,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 		if(src == passIn && passIn.getForeground() == Color.gray) {	//removes pass entry hint
 			passIn.setText("");
 			passIn.setForeground(Color.black);
-			passIn.setEchoChar('\u2022');	//unicode for • character, hides password
+			passIn.setEchoChar('\u2022');	//unicode for â€¢ character, hides password
 		}
         
 	}
