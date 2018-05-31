@@ -62,7 +62,7 @@ public class Teacher {
 		}
 	}
 	
-	public void addAll(ArrayList<String[]> newData) {	//adds all new entries
+	public void addAll(ArrayList<String[]> newData) {	//adds all new entries, no longer used
 		for(String[] item: newData) {
 			boolean isNew = true;
 			for(String[] oldItem : examList) {
@@ -74,6 +74,16 @@ public class Teacher {
 				examList.add(item);
 			}
 		}
+	}
+	
+	public int countRegistered(){
+		int count = 0;
+		for(String[] item : examList){
+			if(item[5].trim().toLowerCase().equals("yes")){
+				count++;
+			}
+		}
+		return count;
 	}
 	
 	public void display() {	//testing purposes only
@@ -101,16 +111,31 @@ public class Teacher {
 		
 		Font font = new Font();
 		font.setSize(12);
+		PdfPTable header = new PdfPTable(4);
+		header.addCell("Total Exams Registered");
+		header.addCell(Integer.toString(examList.size()));
+		header.addCell("Total Exams");
+		header.addCell(Integer.toString(countRegistered()));
+		
 		PdfPTable table = new PdfPTable(6);
 		table.setWidthPercentage(100);
 		table.setWidths(new float[] { 5, 18, 2, 10, 10, 3});
+		int currentPeriod = 0;
+		String currentClass = "";
 		for(String[] item : examList){	//Adds all exam items as rows of their data
-			for(String data : item) {
-				table.addCell(new Paragraph(data,font));
+			if(currentPeriod == Integer.getInteger(item[2]) && currentClass == item[4]){
+				//TODO       Add class specific header
+			}
+			else{
+				table.addCell("Total Exams Registered");
+				table.addCell(Integer.toString(examList.size()));
+				table.addCell("Total Exams");
+				table.addCell(Integer.toString(countRegistered()));
 			}
             table.completeRow();	//go to new row
         }
 		
+		doc.add(header);
 		doc.add(table);
 		doc.close();
 		
