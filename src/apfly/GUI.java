@@ -18,8 +18,8 @@ import java.util.ArrayList;
 public class GUI extends JFrame implements ActionListener, FocusListener{
 	
 	private Panel north = new Panel();	//organizational panels
+	private Panel west = new Panel();
 	private Panel south = new Panel();
-	private Panel SE = new Panel();
 
 	//LOGIN
 	private Panel login = new Panel();
@@ -57,8 +57,8 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 		
 		setLayout(new BorderLayout());	//adding all sections
 		add(north, BorderLayout.NORTH);
+		add(west, BorderLayout.WEST);
 		add(south, BorderLayout.SOUTH);
-		south.add(SE, BorderLayout.EAST);
 		//north.setBackground(Color.gray);
 		
 		//LOGIN SECTION
@@ -84,20 +84,20 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 		chooseFileBtn.addActionListener(this);
 		
 		//TEACHERLILST
-		SE.add(teacherViewPane, BorderLayout.NORTH);
+		west.add(teacherViewPane, BorderLayout.NORTH);
 		teacherViewPane.setPreferredSize(new Dimension(400,500));
 		teacherPanelHolder.setLayout(new GridLayout(0,1));
 		
 		//SEND OPTIONS
-		SE.add(selectAllBtn, BorderLayout.CENTER);
+		south.add(selectAllBtn, BorderLayout.CENTER);
 		selectAllBtn.addActionListener(this);
-		SE.add(deselectAllBtn);
+		south.add(deselectAllBtn);
 		deselectAllBtn.addActionListener(this);
-		SE.add(sendBtn, BorderLayout.SOUTH);
+		south.add(sendBtn, BorderLayout.SOUTH);
 		sendBtn.addActionListener(this);
 		
 		//MESSAGES
-		south.add(msgPanel, BorderLayout.WEST);	//Message panel
+		west.add(msgPanel, BorderLayout.WEST);	//Message panel
 		msgPanel.setPreferredSize(new Dimension(420,500));
 		messages.setEditable(false);
 		msgPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -186,18 +186,16 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 				display("Please select a MER file");
 			}
 			else {
-				if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(this,"Send selected emails?")){
-					for(TeacherPanel tPanel: teacherPanelList) {
-						if(tPanel.isChecked()) {	//send emails to all selected teachers
-							try {
-								double start = System.nanoTime();
-								tPanel.sendEmail(user, pass);
-								display("Emailed " + tPanel + " in " + (System.nanoTime() - start)/1000000000.0 + "seconds.\n");
-							}
-							catch(Exception ex) {
-								display("Error sending " + tPanel + "'s message.\n");
-								display(ex.getMessage());
-							}
+				for(TeacherPanel tPanel: teacherPanelList) {
+					if(tPanel.isChecked()) {	//send emails to all selected teachers
+						try {
+							double start = System.nanoTime();
+							tPanel.sendEmail(user, pass);
+							display("Emailed " + tPanel + " in " + (System.nanoTime() - start)/1000000000.0 + "seconds.\n");
+						}
+						catch(Exception ex) {
+							display("Error sending " + tPanel + "'s message.\n");
+							display(ex.getMessage());
 						}
 					}
 				}
@@ -216,7 +214,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 		if(src == passIn && passIn.getForeground() == Color.gray) {	//removes pass entry hint
 			passIn.setText("");
 			passIn.setForeground(Color.black);
-			passIn.setEchoChar('\u2022');	//unicode for • character, hides password
+			passIn.setEchoChar('\u2022');	//unicode for â€¢ character, hides password
 		}
         
 	}
