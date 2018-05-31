@@ -48,8 +48,8 @@ public class TeacherPanel extends JPanel implements ActionListener{
 		setBorder(BorderFactory.createLineBorder(Color.black));
 	}
 	
-	public void check() {
-		checkBox.setSelected(true);
+	public void check(boolean newVal) {
+		checkBox.setSelected(newVal);
 	}
 	
 	public boolean isChecked() {
