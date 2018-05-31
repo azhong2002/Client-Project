@@ -44,6 +44,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 	//SEND OPTIONS
 	private JButton sendBtn = new JButton("Send");
 	private JButton selectAllBtn = new JButton("Select All");
+	private JButton deselectAllBtn = new JButton("Deselect All");
 	
 	//MESSAGES
 	private JTextArea messages = new JTextArea("Messages: \n", 15, 30);
@@ -84,12 +85,14 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 		
 		//TEACHERLILST
 		SE.add(teacherViewPane, BorderLayout.NORTH);
-		teacherViewPane.setPreferredSize(new Dimension(400,300));
+		teacherViewPane.setPreferredSize(new Dimension(400,500));
 		teacherPanelHolder.setLayout(new GridLayout(0,1));
 		
 		//SEND OPTIONS
 		SE.add(selectAllBtn, BorderLayout.CENTER);
 		selectAllBtn.addActionListener(this);
+		SE.add(deselectAllBtn);
+		deselectAllBtn.addActionListener(this);
 		SE.add(sendBtn, BorderLayout.SOUTH);
 		sendBtn.addActionListener(this);
 		
@@ -164,7 +167,17 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 			}
 			else {
 				for(TeacherPanel tPanel: teacherPanelList) {
-					tPanel.check();
+					tPanel.check(true);
+				}
+			}
+		}
+		else if(src == deselectAllBtn) {		//select all teachers
+			if(teacherPanelList.size() == 0) {
+				display("Please select a MER file");
+			}
+			else {
+				for(TeacherPanel tPanel: teacherPanelList) {
+					tPanel.check(false);
 				}
 			}
 		}
