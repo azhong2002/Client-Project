@@ -186,16 +186,18 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 				display("Please select a MER file");
 			}
 			else {
-				for(TeacherPanel tPanel: teacherPanelList) {
-					if(tPanel.isChecked()) {	//send emails to all selected teachers
-						try {
-							double start = System.nanoTime();
-							tPanel.sendEmail(user, pass);
-							display("Emailed " + tPanel + " in " + (System.nanoTime() - start)/1000000000.0 + "seconds.\n");
-						}
-						catch(Exception ex) {
-							display("Error sending " + tPanel + "'s message.\n");
-							display(ex.getMessage());
+				if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(this,"Send selected emails?")){
+					for(TeacherPanel tPanel: teacherPanelList) {
+						if(tPanel.isChecked()) {	//send emails to all selected teachers
+							try {
+								double start = System.nanoTime();
+								tPanel.sendEmail(user, pass);
+								display("Emailed " + tPanel + " in " + (System.nanoTime() - start)/1000000000.0 + "seconds.\n");
+							}
+							catch(Exception ex) {
+								display("Error sending " + tPanel + "'s message.\n");
+								display(ex.getMessage());
+							}
 						}
 					}
 				}
