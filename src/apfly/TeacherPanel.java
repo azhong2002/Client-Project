@@ -65,12 +65,12 @@ public class TeacherPanel extends JPanel implements ActionListener, FocusListene
 		return checkBox.isSelected();
 	}
 	
-	public void sendEmail(String user, String pass) throws MessagingException, IOException, DocumentException {
+	public void sendEmail(String user, String pass, String messageToAll) throws MessagingException, IOException, DocumentException {
 		String customMsg = "'";
 		if(customText.getForeground() == Color.black) {
 			customMsg = customText.getText();
 		}
-		teacher.sendEmail(user, pass, customMsg, name + "_AP_Registration.pdf");
+		teacher.sendEmail(user, pass, messageToAll + "\n" + customMsg, name + "_AP_Registration.pdf");
 	}
 	
 	public void actionPerformed(ActionEvent e) {
