@@ -9,6 +9,7 @@ import java.util.Properties;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -86,6 +87,20 @@ public class Teacher {
 		return count;
 	}
 	
+	public int[] countRegistered(int period){	//registration per class as tuple (registered, total)
+		int[] count = new int[2];
+		for(String[] item : examList){
+			if(Integer.parseInt(item[2]) == period) {
+				count[1]++;
+				if(item[5].trim().toLowerCase().equals("yes")){
+					count[0]++;
+				}
+			}
+			
+		}
+		return count;
+	}
+	
 	public void display() {	//testing purposes only
 		for(String[] item: examList) {
 			for(String metaTag: item) {
@@ -111,29 +126,42 @@ public class Teacher {
 		
 		Font font = new Font();
 		font.setSize(12);
-		PdfPTable header = new PdfPTable(4);
-		header.addCell("Total Exams Registered");
-		header.addCell(Integer.toString(examList.size()));
-		header.addCell("Total Exams");
-		header.addCell(Integer.toString(countRegistered()));
+		PdfPTable header = new PdfPTable(5);
+		header.setWidths(new float[] {15, 20, 4, 15, 4});
+		PdfPCell nameCell = createHeaderCell(name);
+		nameCell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+		header.addCell(nameCell);
+		header.addCell(createHeaderCell("Total Exams Registered:"));
+		header.addCell(createHeaderCell(Integer.toString(countRegistered())));
+		header.addCell(createHeaderCell("Total Students:"));
+		header.addCell(createHeaderCell(Integer.toString(examList.size())));
 		
 		PdfPTable table = new PdfPTable(6);
 		table.setWidthPercentage(100);
 		table.setWidths(new float[] { 5, 18, 2, 10, 10, 3});
 		int currentPeriod = 0;
-		String currentClass = "";
 		for(String[] item : examList){	//Adds all exam items as rows of their data
-			if(currentPeriod == Integer.getInteger(item[2]) && currentClass == item[4]){
-				//TODO       Add class specific header
+			if(currentPeriod != Integer.parseInt(item[2])){	//if it's a new class, add an information header 
+				currentPeriod = Integer.parseInt(item[2]);
+				
+				int[] registered = countRegistered(currentPeriod);	//gets tuple per period (registered, total)
+				
+				table.addCell(createHeaderCell("Period " + currentPeriod));
+				table.addCell(createHeaderCell("Total Exams Registered:"));
+				table.addCell(createHeaderCell(Integer.toString(registered[0])));
+				table.addCell(createHeaderCell("Total Students:"));
+				table.addCell(createHeaderCell(Integer.toString(registered[1])));
+				table.addCell(createHeaderCell(""));
+				
+	            table.completeRow();	//go to new row
 			}
-			else{
-				table.addCell("Total Exams Registered");
-				table.addCell(Integer.toString(examList.size()));
-				table.addCell("Total Exams");
-				table.addCell(Integer.toString(countRegistered()));
+			for(String data : item) {
+				table.addCell(new Paragraph(data,font));
 			}
             table.completeRow();	//go to new row
         }
+		
+		header.setSpacingAfter(12f);	//intertable space
 		
 		doc.add(header);
 		doc.add(table);
@@ -143,6 +171,18 @@ public class Teacher {
 		
 	}
 	
+	private PdfPCell createHeaderCell(String string) {	//makes header cell
+		PdfPCell out = new PdfPCell(new Phrase(string));
+		out.setBorderWidthBottom(2);
+		out.setBorderWidthTop(2);
+		out.setBorderWidthLeft(0);
+		out.setBorderWidthRight(0);
+		out.setPaddingBottom(6);
+		out.setPaddingTop(6);
+		out.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+		return out;
+	}
+
 	public void sendEmail(String user, String pass, String path) throws MessagingException, IOException, DocumentException{	//sends PDF w/ email
 		Properties prop = new Properties();
 		prop.setProperty("mail.smtp.host", "smtp.gmail.com");	//change accordingly with email service
