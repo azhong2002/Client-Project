@@ -45,6 +45,8 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 	private JButton sendBtn = new JButton("Send");
 	private JButton selectAllBtn = new JButton("Select All");
 	private JButton deselectAllBtn = new JButton("Deselect All");
+	public JTextArea messageText = new JTextArea("Add Message to All");
+	public JScrollPane messageTextScroll = new JScrollPane(messageText);
 	
 	//MESSAGES
 	private JTextArea messages = new JTextArea("Messages: \n", 15, 30);
@@ -90,6 +92,10 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 		teacherPanelHolder.addFocusListener(this);
 		
 		//SEND OPTIONS
+		south.add(messageTextScroll, BorderLayout.NORTH);
+		messageTextScroll.setPreferredSize(new Dimension(400, 50));
+		messageText.setForeground(Color.gray);
+		messageText.addFocusListener(this);
 		south.add(selectAllBtn, BorderLayout.CENTER);
 		selectAllBtn.addActionListener(this);
 		south.add(deselectAllBtn);
@@ -191,7 +197,12 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 					if(tPanel.isChecked()) {	//send emails to all selected teachers
 						try {
 							double start = System.nanoTime();
-							tPanel.sendEmail(user, pass);
+							String messageToAll = messageText.getText();
+							if(messageText.getForeground() == Color.gray){
+								messageToAll = "Attached is a PDF containing the AP Registration information for your students. This is an automated test "
+										+ "email of APFly, the AP Registration notification app by Firefly Software.\n";
+							}
+							tPanel.sendEmail(user, pass, messageToAll);
 							display("Emailed " + tPanel + " in " + (System.nanoTime() - start)/1000000000.0 + "seconds.\n");
 						}
 						catch(Exception ex) {
@@ -215,7 +226,11 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 		if(src == passIn && passIn.getForeground() == Color.gray) {	//removes pass entry hint
 			passIn.setText("");
 			passIn.setForeground(Color.black);
-			passIn.setEchoChar('\u2022');	//unicode for â€¢ character, hides password
+			passIn.setEchoChar('\u2022');	//unicode for Ã¢â‚¬Â¢ character, hides password
+		}
+		if(src == messageText && messageText.getForeground() == Color.gray) {	//if user is empty, resets entry hint
+			messageText.setText("");
+			messageText.setForeground(Color.black);
 		}
         
 	}
@@ -230,6 +245,10 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 			passIn.setText("Password");
         	passIn.setForeground(Color.gray);
         	passIn.setEchoChar((char) 0);	//makes hint text appear as text not dots
+		}
+		if(src == messageText && messageText.getText().equals("")) {	//if user is empty, resets entry hint
+			messageText.setText("Custom Add-on Message");
+			messageText.setForeground(Color.gray);
 		}
 		
 	}
