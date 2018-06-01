@@ -41,8 +41,12 @@ public class Teacher {
         while ((inputLine = in.readLine()) != null) {
         	source += inputLine;
         }
-        int start = source.indexOf("mailto:",source.indexOf(name));
-        teacherEmail = source.substring(start + 7, source.indexOf("\">", start));
+        int start = source.indexOf("mailto:",source.indexOf(name + "</p>"));
+        if(source.indexOf(name + "</p>") == -1) {
+        	teacherEmail = defaultEmail;
+        } else {
+        	teacherEmail = source.substring(start + 7, source.indexOf("\">", start));
+        }
         in.close();
 	}
 	
