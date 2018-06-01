@@ -208,8 +208,7 @@ public class Teacher {
 		msg.setSubject("AP Registration Information");
 		
 		MimeBodyPart msgBody = new MimeBodyPart();	//Add body message bodypart
-		msgBody.setContent("Attached is a PDF containing the AP Registration information for your students. This is an automated test "
-				+ "email of APFly, the AP Registration notification app by Firefly Software.\n" + customMessage, "text/html");
+		msgBody.setContent(customMessage, "text/html");
 		multipart.addBodyPart(msgBody);
 		System.out.println("Text added");
 		
