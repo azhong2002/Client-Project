@@ -87,6 +87,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 		west.add(teacherViewPane, BorderLayout.NORTH);
 		teacherViewPane.setPreferredSize(new Dimension(400,500));
 		teacherPanelHolder.setLayout(new GridLayout(0,1));
+		teacherPanelHolder.addFocusListener(this);
 		
 		//SEND OPTIONS
 		south.add(selectAllBtn, BorderLayout.CENTER);

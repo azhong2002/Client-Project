@@ -183,7 +183,7 @@ public class Teacher {
 		return out;
 	}
 
-	public void sendEmail(String user, String pass, String path) throws MessagingException, IOException, DocumentException{	//sends PDF w/ email
+	public void sendEmail(String user, String pass, String customMessage, String path) throws MessagingException, IOException, DocumentException{	//sends PDF w/ email
 		Properties prop = new Properties();
 		prop.setProperty("mail.smtp.host", "smtp.gmail.com");	//change accordingly with email service
 		prop.put("mail.smtp.starttls.enable", "true");
@@ -205,7 +205,7 @@ public class Teacher {
 		
 		MimeBodyPart msgBody = new MimeBodyPart();	//Add body message bodypart
 		msgBody.setContent("Attached is a PDF containing the AP Registration information for your students. This is an automated test "
-				+ "email of APFly, the AP Registration notification app by Firefly Software.", "text/html");
+				+ "email of APFly, the AP Registration notification app by Firefly Software.\n" + customMessage, "text/html");
 		multipart.addBodyPart(msgBody);
 		System.out.println("Text added");
 		
