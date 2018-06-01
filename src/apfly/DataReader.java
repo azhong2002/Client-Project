@@ -70,7 +70,13 @@ public class DataReader {
 
 	public static void main(String[] args) {		//for testing purposes
 		ArrayList<Teacher> teachers = readData("test_data.mer");
-		//for(Teacher t : teachers) {
+		try {
+		teachers.get(0).makePDF("");
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+		/*//for(Teacher t : teachers) {
 			//System.out.println(t.teacherEmail);
 			try{
 				//System.out.println(t.makePDF(""));
@@ -89,7 +95,7 @@ public class DataReader {
 				System.out.println("Messaging error");
 				e.printStackTrace();
 			}
-		//}	
+		//}	*/
 	}
 
 }
