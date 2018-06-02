@@ -70,7 +70,7 @@ public class TeacherPanel extends JPanel implements ActionListener, FocusListene
 		if(customText.getForeground() == Color.black) {
 			customMsg = customText.getText();
 		}
-		teacher.sendEmail(user, pass, messageToAll + "\n" + customMsg, name + "_AP_Registration.pdf");
+		teacher.sendEmail(user, pass, messageToAll + "<br />" + customMsg, name + "_AP_Registration.pdf");	//use br; email text is formatted as html
 	}
 	
 	public void actionPerformed(ActionEvent e) {

@@ -70,11 +70,11 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 		loginEntries.add(userIn, BorderLayout.NORTH);	//user and pass entries, with gray hint text when nothing entered
 		userIn.setForeground(Color.gray);
 		userIn.addFocusListener(this);
-		userIn.setPreferredSize(new Dimension(150,20));
+		userIn.setPreferredSize(new Dimension(200,20));
 		loginEntries.add(passIn, BorderLayout.SOUTH);
 		passIn.setForeground(Color.gray);
 		passIn.addFocusListener(this);
-		passIn.setPreferredSize(new Dimension(150,20));
+		passIn.setPreferredSize(new Dimension(200,20));
 		passIn.setEchoChar((char) 0);	//allows password hint text to be seen
 		
 		login.add(loginBtn, BorderLayout.EAST);	//button to log in
