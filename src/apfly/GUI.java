@@ -39,6 +39,9 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 	private JButton chooseFileBtn = new JButton("Upload MER file");
 	private JFileChooser fc = new JFileChooser();
 	
+	//HELP
+	private JButton helpBtn = new JButton("Help");
+	
 	//TEACHER LIST
 	private ArrayList<Teacher> teachList = new ArrayList<Teacher>();
 	ArrayList<TeacherPanel> teacherPanelList = new ArrayList<TeacherPanel>();
@@ -65,25 +68,24 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 		add(north, BorderLayout.NORTH);
 		add(center, BorderLayout.CENTER);
 		add(south, BorderLayout.SOUTH);
-		//north.setBackground(Color.gray);
-		
+
 		//LOGIN SECTION
 		north.add(login, BorderLayout.WEST);	
 		login.add(loginEntries, BorderLayout.WEST);
-		
+	
 		loginEntries.add(userIn, BorderLayout.NORTH);	//User email address entry
 		userIn.setForeground(Color.gray);
 		userIn.addFocusListener(this);
 		userIn.addKeyListener(this);
 		userIn.setPreferredSize(new Dimension(200,20));
-		
+	
 		loginEntries.add(passIn, BorderLayout.SOUTH);	//Password email address entry
 		passIn.setForeground(Color.gray);
 		passIn.addFocusListener(this);
 		passIn.addKeyListener(this);
 		passIn.setPreferredSize(new Dimension(200,20));
 		passIn.setEchoChar((char) 0);	//allows password hint text to be seen
-		
+	
 		login.add(loginBtn, BorderLayout.EAST);	//button to log in
 		loginBtn.addActionListener(this);
 		
@@ -91,6 +93,10 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 		north.add(fileUpload, BorderLayout.EAST);	//fileupload button
 		fileUpload.add(chooseFileBtn, BorderLayout.NORTH);
 		chooseFileBtn.addActionListener(this);
+		
+		//HELP
+		north.add(helpBtn);
+		helpBtn.addActionListener(this);
 		
 		//TEACHERLIST
 		center.add(teacherViewPane, BorderLayout.NORTH);
@@ -243,6 +249,19 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 		}
 	}
 	
+	public void showHelpMessage() {	//displays instructions on how to use the program
+		JPanel helpPanel = new JPanel();
+		JTextArea helpMessage = new JTextArea("Welcome to the APFly Application produced by Firefly Software (2018)!" + 
+				" The following is an in depth description of what the application is, what it can do, and how to use it. "
+				+ "APFly is an automatic file sorting, compiling, and sending application designed to make sending notification "
+				+ "emails about the status of their AP class or classes participation in the AP test.");
+		helpMessage.setPreferredSize(new Dimension(500, 400));
+		helpMessage.setLineWrap(true);
+		helpMessage.setWrapStyleWord(true);
+		helpPanel.add(helpMessage);
+		JOptionPane.showMessageDialog(this, helpPanel, "Help", JOptionPane.PLAIN_MESSAGE);
+	}
+	
 	public void actionPerformed(ActionEvent e) {
 		Object src = e.getSource();
 		if(src == loginBtn) {//sets login info if provided
@@ -250,6 +269,9 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 		}
 		else if(src == chooseFileBtn) {	//choosing file
 			addFile();			
+		}
+		else if(src == helpBtn) {
+			showHelpMessage();
 		}
 		else if(src == selectAllBtn) {		//select all teachers
 			selectAll(true);
