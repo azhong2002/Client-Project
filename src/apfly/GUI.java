@@ -14,6 +14,8 @@ import java.awt.Panel;
 import java.awt.Toolkit;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Properties;
+import javax.mail.*;
 
 public class GUI extends JFrame implements ActionListener, FocusListener{
 	
@@ -26,7 +28,8 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 	private Panel loginEntries = new Panel();
 	private JTextField userIn = new JTextField("Username     ");
 	private JPasswordField passIn = new JPasswordField("Password     ");
-	private JButton loginBtn = new JButton("Set Credentials");
+	private JButton loginBtn = new JButton("Log in");
+	private boolean loggedIn = false;
 	String user = "";
 	String pass = "";
 	
@@ -132,91 +135,124 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 		messages.setText(messages.getText() + "\n" + msg);
 	}
 	
-	public void actionPerformed(ActionEvent e) {
-		Object src = e.getSource();
-		if(src == loginBtn) {//sets login info if provided
-			if(userIn.getForeground() != Color.gray && passIn.getForeground() != Color.gray){
-				user = userIn.getText();
-				pass = new String(passIn.getPassword());
-				passIn.setText("Password");			//resets entry hints
-	        	passIn.setForeground(Color.gray);
-	        	passIn.setEchoChar((char) 0);
-	        	userIn.setText("Username");
-	        	userIn.setForeground(Color.gray);
-	        	display("Login credentials for " + user + " set.");
-			}
-			else{
-				display("Please provide a username and password.");
-			}
-		}
-		else if(src == chooseFileBtn) {	//choosing file
-			String file;
-			int returnVal = fc.showOpenDialog(this);
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				teachList.clear();
-                file = fc.getSelectedFile().getPath();
-                for(Teacher inp : DataReader.readData(file)) {	//add all new entries for each teacher into list
-                	for(Teacher t: teachList) {
-                		if (t.name.equals(inp.name)) {
-                			t.addAll(inp.examList);
-                		}
-                	}
-                	teachList.add(inp);
-                }
-                setTeachers(teachList);
-                display("Retrieved data from " + file + "\n");
-			}
-			
-		}
-		else if(src == selectAllBtn) {		//select all teachers
-			if(teacherPanelList.size() == 0) {
-				display("Please select a MER file");
-			}
-			else {
-				for(TeacherPanel tPanel: teacherPanelList) {
-					tPanel.check(true);
-				}
-			}
-		}
-		else if(src == deselectAllBtn) {		//select all teachers
-			if(teacherPanelList.size() == 0) {
-				display("Please select a MER file");
-			}
-			else {
-				for(TeacherPanel tPanel: teacherPanelList) {
-					tPanel.check(false);
-				}
-			}
-		}
-		else if(src == sendBtn) {
-			if(teacherPanelList.size() == 0) {
-				display("Please select a MER file");
-			}
-			else {
-				for(TeacherPanel tPanel: teacherPanelList) {
-					if(tPanel.isChecked()) {	//send emails to all selected teachers
-						try {
-							double start = System.nanoTime();
-							String messageToAll = messageText.getText();
-							if(messageText.getForeground() == Color.gray){
-								messageToAll = "Attached is a PDF containing the AP Registration information for your students. This is an automated test "
-										+ "email of APFly, the AP Registration notification app by Firefly Software.\n";
-							}
-							tPanel.sendEmail(user, pass, messageToAll);
-							display("Emailed " + tPanel + " in " + (System.nanoTime() - start)/1000000000.0 + "seconds.\n");
-						}
-						catch(Exception ex) {
-							display("Error sending " + tPanel + "'s message.\n");
-							display(ex.getMessage());
-						}
-					}
-				}
-				display("\n");
-			}
-			
+	public boolean loginCheck(String user, String pass) {
+		try {
+			Properties props = new Properties();
+			// required for gmail 
+			props.put("mail.smtp.starttls.enable","true");
+			props.put("mail.smtp.auth", "true");
+		    Session session = Session.getInstance(props, null);
+		    Transport transport = session.getTransport("smtp");
+		    transport.connect("smtp.gmail.com", 587, user, pass);
+		    transport.close();
+		    return true;
+		} 
+		catch(Exception e) {
+			display("Error logging in. Check your credentials and connection and try again.");
+			return false;
 		}
 	}
 	
+	public void login() {
+		if(userIn.getForeground() != Color.gray && passIn.getForeground() != Color.gray){
+			if(loginCheck(userIn.getText(),new String(passIn.getPassword()))) {
+				user = userIn.getText();
+				pass = new String(passIn.getPassword());
+				passIn.setText("Password");			//resets entry hints
+				passIn.setForeground(Color.gray);
+				passIn.setEchoChar((char) 0);
+				userIn.setText("Username");
+				userIn.setForeground(Color.gray);
+				display("Logged in to " + user);
+				loggedIn = true;
+			}
+		}
+		else{
+			display("Please provide a username and password.");
+		}
+	}
+	
+	public void addFile() {
+		String file;
+		int returnVal = fc.showOpenDialog(this);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			teachList.clear();
+            file = fc.getSelectedFile().getPath();
+            for(Teacher inp : DataReader.readData(file)) {	//add all new entries for each teacher into list
+            	for(Teacher t: teachList) {
+            		if (t.name.equals(inp.name)) {
+            			t.addAll(inp.examList);
+            		}
+            	}
+            	teachList.add(inp);
+            }
+            setTeachers(teachList);
+            display("Retrieved data from " + file + "\n");
+		}
+	}
+	
+	public void selectAll(boolean newCheck) {
+		if(teacherPanelList.size() == 0) {
+			display("Please select a MER file");
+		}
+		else {
+			for(TeacherPanel tPanel: teacherPanelList) {
+				tPanel.check(newCheck);
+			}
+		}
+	}
+	
+	public void sendEmails() {
+		if(teacherPanelList.size() == 0) {
+			display("Please select a MER file");
+		}
+		else if(!loggedIn) {
+			display("Please log in");
+		}
+		else {
+			for(TeacherPanel tPanel: teacherPanelList) {
+				if(tPanel.isChecked()) {	//send emails to all selected teachers
+					try {
+						double start = System.nanoTime();
+						String messageToAll = messageText.getText();
+						if(messageText.getForeground() == Color.gray){
+							messageToAll = "Attached is a PDF containing the AP Registration information for your students. This is an automated test "
+									+ "email of APFly, the AP Registration notification app by Firefly Software.\n";
+						}
+						tPanel.sendEmail(user, pass, messageToAll);
+						display("Emailed " + tPanel + " in " + (System.nanoTime() - start)/1000000000.0 + "seconds.\n");
+					}
+					catch(Exception ex) {
+						display("Error sending " + tPanel + "'s message.\n");
+						display(ex.getMessage());
+					}
+				}
+			}
+			display("\n");
+		}
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+		Object src = e.getSource();
+		if(src == loginBtn) {//sets login info if provided
+			login();
+		}
+		else if(src == chooseFileBtn) {	//choosing file
+			addFile();			
+		}
+		else if(src == selectAllBtn) {		//select all teachers
+			selectAll(true);
+		}
+		else if(src == deselectAllBtn) {		//select all teachers
+			selectAll(false);
+		}
+		else if(src == sendBtn) {
+			sendEmails();
+		}
+	}
+	
+
+	//Focus events, for text entry field hints
 	public void focusGained(FocusEvent e) {
 		Object src = e.getSource();
 		if(src == userIn && userIn.getForeground() == Color.gray) {	//removes username entry hint
@@ -234,7 +270,6 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 		}
         
 	}
-
 	public void focusLost(FocusEvent e) {
 		Object src = e.getSource();
 		if(src == userIn && userIn.getText().equals("")) {	//if user is empty, resets entry hint
