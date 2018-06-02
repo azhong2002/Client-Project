@@ -19,8 +19,9 @@ import javax.mail.*;
 
 public class GUI extends JFrame implements ActionListener, FocusListener, KeyListener{
 	
-	private Panel north = new Panel();	//organizational panels
-	private Panel west = new Panel();
+	//organizational panels
+	private Panel north = new Panel();	
+	private Panel center = new Panel();
 	private Panel south = new Panel();
 
 	//LOGIN
@@ -62,7 +63,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 		
 		setLayout(new BorderLayout());	//adding all sections
 		add(north, BorderLayout.NORTH);
-		add(west, BorderLayout.WEST);
+		add(center, BorderLayout.CENTER);
 		add(south, BorderLayout.SOUTH);
 		//north.setBackground(Color.gray);
 		
@@ -92,8 +93,8 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 		chooseFileBtn.addActionListener(this);
 		
 		//TEACHERLIST
-		west.add(teacherViewPane, BorderLayout.NORTH);
-		teacherViewPane.setPreferredSize(new Dimension(400,500));
+		center.add(teacherViewPane, BorderLayout.NORTH);
+		teacherViewPane.setPreferredSize(new Dimension(450,500));
 		teacherPanelHolder.setLayout(new GridLayout(0,1));
 		teacherPanelHolder.addFocusListener(this);
 		
@@ -115,7 +116,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 		sendBtn.addActionListener(this);
 		
 		//MESSAGES
-		west.add(msgPanel, BorderLayout.WEST);	//Message panel
+		center.add(msgPanel, BorderLayout.WEST);	//Message panel
 		msgPanel.setPreferredSize(new Dimension(420,500));
 		messages.setEditable(false);
 		messages.setLineWrap(true);
