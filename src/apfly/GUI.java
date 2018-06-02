@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 import javax.mail.*;
 
-public class GUI extends JFrame implements ActionListener, FocusListener{
+public class GUI extends JFrame implements ActionListener, FocusListener, KeyListener{
 	
 	private Panel north = new Panel();	//organizational panels
 	private Panel west = new Panel();
@@ -70,13 +70,16 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 		north.add(login, BorderLayout.WEST);	
 		login.add(loginEntries, BorderLayout.WEST);
 		
-		loginEntries.add(userIn, BorderLayout.NORTH);	//user and pass entries, with gray hint text when nothing entered
+		loginEntries.add(userIn, BorderLayout.NORTH);	//User email address entry
 		userIn.setForeground(Color.gray);
 		userIn.addFocusListener(this);
+		userIn.addKeyListener(this);
 		userIn.setPreferredSize(new Dimension(200,20));
-		loginEntries.add(passIn, BorderLayout.SOUTH);
+		
+		loginEntries.add(passIn, BorderLayout.SOUTH);	//Password email address entry
 		passIn.setForeground(Color.gray);
 		passIn.addFocusListener(this);
+		passIn.addKeyListener(this);
 		passIn.setPreferredSize(new Dimension(200,20));
 		passIn.setEchoChar((char) 0);	//allows password hint text to be seen
 		
@@ -84,32 +87,39 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 		loginBtn.addActionListener(this);
 		
 		//FILEUPLOAD
-		north.add(fileUpload, BorderLayout.EAST);
+		north.add(fileUpload, BorderLayout.EAST);	//fileupload button
 		fileUpload.add(chooseFileBtn, BorderLayout.NORTH);
 		chooseFileBtn.addActionListener(this);
 		
-		//TEACHERLILST
+		//TEACHERLIST
 		west.add(teacherViewPane, BorderLayout.NORTH);
 		teacherViewPane.setPreferredSize(new Dimension(400,500));
 		teacherPanelHolder.setLayout(new GridLayout(0,1));
 		teacherPanelHolder.addFocusListener(this);
 		
 		//SEND OPTIONS
-		south.add(messageTextScroll, BorderLayout.NORTH);
+		south.add(messageTextScroll, BorderLayout.NORTH);	//Messages to All
 		messageTextScroll.setPreferredSize(new Dimension(400, 50));
 		messageText.setForeground(Color.gray);
 		messageText.addFocusListener(this);
-		south.add(selectAllBtn, BorderLayout.CENTER);
+		messageText.setLineWrap(true);
+		messageText.setWrapStyleWord(true);
+		
+		south.add(selectAllBtn, BorderLayout.CENTER);	//Select all teachers button
 		selectAllBtn.addActionListener(this);
-		south.add(deselectAllBtn);
+		
+		south.add(deselectAllBtn);						//deselect all
 		deselectAllBtn.addActionListener(this);
-		south.add(sendBtn, BorderLayout.SOUTH);
+		
+		south.add(sendBtn, BorderLayout.SOUTH);			//send emails
 		sendBtn.addActionListener(this);
 		
 		//MESSAGES
 		west.add(msgPanel, BorderLayout.WEST);	//Message panel
 		msgPanel.setPreferredSize(new Dimension(420,500));
 		messages.setEditable(false);
+		messages.setLineWrap(true);
+		messages.setWrapStyleWord(true);
 		msgPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		setIconImage(Toolkit.getDefaultToolkit().getImage("Logo.png"));
@@ -193,7 +203,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 	
 	public void selectAll(boolean newCheck) {
 		if(teacherPanelList.size() == 0) {
-			display("Please select a MER file");
+			display("Please select a MER file.");
 		}
 		else {
 			for(TeacherPanel tPanel: teacherPanelList) {
@@ -204,10 +214,10 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 	
 	public void sendEmails() {
 		if(teacherPanelList.size() == 0) {
-			display("Please select a MER file");
+			display("Please select a MER file.");
 		}
 		else if(!loggedIn) {
-			display("Please log in");
+			display("Please log in.");
 		}
 		else {
 			for(TeacherPanel tPanel: teacherPanelList) {
@@ -216,11 +226,11 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
 						double start = System.nanoTime();
 						String messageToAll = messageText.getText();
 						if(messageText.getForeground() == Color.gray){
-							messageToAll = "Attached is a PDF containing the AP Registration information for your students. This is an automated test "
-									+ "email of APFly, the AP Registration notification app by Firefly Software.\n";
+							messageToAll = "Attached is a PDF containing the AP Registration information for your students. This is an automated "
+									+ "email of APFly, the AP Registration notification app by Firefly Software.";
 						}
 						tPanel.sendEmail(user, pass, messageToAll);
-						display("Emailed " + tPanel + " in " + (System.nanoTime() - start)/1000000000.0 + "seconds.\n");
+						display("Emailed " + tPanel + " in " + (System.nanoTime() - start)/1000000000.0 + "seconds.");
 					}
 					catch(Exception ex) {
 						display("Error sending " + tPanel + "'s message.\n");
@@ -282,10 +292,31 @@ public class GUI extends JFrame implements ActionListener, FocusListener{
         	passIn.setEchoChar((char) 0);	//makes hint text appear as text not dots
 		}
 		if(src == messageText && messageText.getText().equals("")) {	//if user is empty, resets entry hint
-			messageText.setText("Custom Add-on Message");
+			messageText.setText("Add Message to All");
 			messageText.setForeground(Color.gray);
 		}
 		
+	}
+	
+	public void keyPressed(KeyEvent e) {	//Login on hitting enter for user and pass fields
+	    if (e.getKeyCode()==KeyEvent.VK_ENTER){
+	    	if(userIn.getForeground() == Color.gray && passIn.getForeground() == Color.gray) {
+	    		display("Please enter a username and password.");
+	    	}
+	    	else {
+	    		login();
+	    	}
+	    }
+
+	}
+	
+	public void keyReleased(KeyEvent e) {
+		// Do nothing, requried by KeyListener interface
+		
+	}
+
+	public void keyTyped(KeyEvent e) {
+		//Do nothing, requried by KeyListener interface		
 	}
 	
 	public static void main(String[] args) {

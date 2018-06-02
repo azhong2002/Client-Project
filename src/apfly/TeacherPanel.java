@@ -44,9 +44,11 @@ public class TeacherPanel extends JPanel implements ActionListener, FocusListene
 		top.add(checkBox, BorderLayout.CENTER);
 		top.add(customTextScroll, BorderLayout.EAST);
 		customTextScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		customTextScroll.setPreferredSize(new Dimension(200, 35));
+		customTextScroll.setPreferredSize(new Dimension(250, 50));
     	customText.setForeground(Color.gray);
     	customText.addFocusListener(this);
+    	customText.setLineWrap(true);
+    	customText.setWrapStyleWord(true);
 		
 		emailDisplay = new JLabel(teacher.teacherEmail);
 		emailDisplay.setPreferredSize(new Dimension(200, 25));
