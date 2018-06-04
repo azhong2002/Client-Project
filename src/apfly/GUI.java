@@ -56,7 +56,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 	public JScrollPane messageTextScroll = new JScrollPane(messageText);
 	
 	//MESSAGES
-	private JTextArea messages = new JTextArea("Messages: \n", 15, 30);
+	private JTextArea messages = new JTextArea("Messages: \n");
 	private JScrollPane msgPanel = new JScrollPane(messages);
 	
 	public GUI(String title) {
@@ -100,13 +100,15 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 		
 		//TEACHERLIST
 		center.add(teacherViewPane, BorderLayout.NORTH);
-		teacherViewPane.setPreferredSize(new Dimension(450,500));
+		teacherViewPane.setPreferredSize(new Dimension(600,500));
+		teacherViewPane.getVerticalScrollBar().setUnitIncrement(16);
 		teacherPanelHolder.setLayout(new GridLayout(0,1));
 		teacherPanelHolder.addFocusListener(this);
 		
 		//SEND OPTIONS
 		south.add(messageTextScroll, BorderLayout.NORTH);	//Messages to All
-		messageTextScroll.setPreferredSize(new Dimension(400, 50));
+		messageTextScroll.setPreferredSize(new Dimension(600, 150));
+		messageTextScroll.getVerticalScrollBar().setUnitIncrement(16);
 		messageText.setForeground(Color.gray);
 		messageText.addFocusListener(this);
 		messageText.setLineWrap(true);
@@ -123,10 +125,11 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 		
 		//MESSAGES
 		center.add(msgPanel, BorderLayout.WEST);	//Message panel
-		msgPanel.setPreferredSize(new Dimension(420,500));
+		msgPanel.setPreferredSize(new Dimension(650,500));
 		messages.setEditable(false);
 		messages.setLineWrap(true);
 		messages.setWrapStyleWord(true);
+		msgPanel.getVerticalScrollBar().setUnitIncrement(16);
 		msgPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		setIconImage(Toolkit.getDefaultToolkit().getImage("Logo.png"));
@@ -160,7 +163,24 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 			props.put("mail.smtp.auth", "true");
 		    Session session = Session.getInstance(props, null);
 		    Transport transport = session.getTransport("smtp");
-		    transport.connect("smtp.gmail.com", 587, user, pass);
+		    
+		    String smtp = "smtp.gmail.com";
+		    int port = 587;
+		    
+		    if(user.indexOf("@outlook.com") != -1 || user.indexOf("@hotmail.com") != -1) {
+		    	smtp = "smtp.live.com";
+		    }
+		    else if(user.indexOf("@yahoo.com") != -1){
+		    	smtp = "mail.yahoo.com";
+		    }
+		    else if(user.indexOf("@verizon.net") != -1){
+		    	smtp = "outgoing.verizon.net";
+		    	port = 465;
+		    }
+		    else if(user.indexOf("@aol.com") != -1) {
+		    	smtp = "smtp.aol.com";
+		    }
+		    transport.connect(smtp, port, user, pass);
 		    transport.close();
 		    return true;
 		} 
@@ -181,6 +201,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 				userIn.setText("Username");
 				userIn.setForeground(Color.gray);
 				display("Logged in to " + user);
+				Teacher.defaultEmail = user;
 				loggedIn = true;
 			}
 		}

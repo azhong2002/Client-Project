@@ -189,9 +189,27 @@ public class Teacher {
 
 	public void sendEmail(String user, String pass, String customMessage, String path) throws MessagingException, IOException, DocumentException{	//sends PDF w/ email
 		Properties prop = new Properties();
-		prop.setProperty("mail.smtp.host", "smtp.gmail.com");	//change accordingly with email service
+		
+		String smtp = "smtp.gmail.com";
+	    int port = 587;
+	    
+	    if(user.indexOf("@outlook.com") != -1 || user.indexOf("@hotmail.com") != -1) {
+	    	smtp = "smtp.live.com";
+	    }
+	    else if(user.indexOf("@yahoo.com") != -1){
+	    	smtp = "mail.yahoo.com";
+	    }
+	    else if(user.indexOf("@verizon.net") != -1){
+	    	smtp = "outgoing.verizon.net";
+	    	port = 465;
+	    }
+	    else if(user.indexOf("@aol.com") != -1) {
+	    	smtp = "smtp.aol.com";
+	    }
+		
+		prop.setProperty("mail.smtp.host", smtp);	//change accordingly with email service
 		prop.put("mail.smtp.starttls.enable", "true");
-		prop.put("mail.smtp.port", "587");
+		prop.put("mail.smtp.port", port);
 		prop.put("mail.smtp.auth", true);
 		
 		Session s = Session.getDefaultInstance(prop, 

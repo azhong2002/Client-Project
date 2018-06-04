@@ -44,7 +44,8 @@ public class TeacherPanel extends JPanel implements ActionListener, FocusListene
 		top.add(checkBox, BorderLayout.CENTER);
 		top.add(customTextScroll, BorderLayout.EAST);
 		customTextScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		customTextScroll.setPreferredSize(new Dimension(250, 50));
+		customTextScroll.setPreferredSize(new Dimension(400, 80));
+		customTextScroll.getVerticalScrollBar().setUnitIncrement(16);
     	customText.setForeground(Color.gray);
     	customText.addFocusListener(this);
     	customText.setLineWrap(true);
@@ -68,7 +69,7 @@ public class TeacherPanel extends JPanel implements ActionListener, FocusListene
 	}
 	
 	public void sendEmail(String user, String pass, String messageToAll) throws MessagingException, IOException, DocumentException {
-		String customMsg = "'";
+		String customMsg = "";
 		if(customText.getForeground() == Color.black) {
 			customMsg = customText.getText();
 		}
