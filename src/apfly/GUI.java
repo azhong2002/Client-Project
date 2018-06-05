@@ -260,6 +260,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 			display("Please log in.");
 		}
 		else {
+			String fails = "";
 			for(TeacherPanel tPanel: teacherPanelList) {
 				if(tPanel.isChecked()) {	//send emails to all selected teachers
 					try {
@@ -275,12 +276,15 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 					catch(Exception ex) {
 						display("Error sending " + tPanel + "'s message.\n");
 						display(ex.getMessage());
+						if(fails.length() > 0) {
+							fails += ", ";
+						}
+						fails += (tPanel.toString());
 					}
 				}
 			}
-			display("\n");
+			display("\nFinished email batch. Failed to send to " + fails);
 		}
-		display("Finished email batch.");
 	}
 	
 	public void showHelpMessage() throws Exception {	//displays instructions on how to use the program
