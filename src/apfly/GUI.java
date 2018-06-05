@@ -280,6 +280,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 			}
 			display("\n");
 		}
+		display("Finished email batch.");
 	}
 	
 	public void showHelpMessage() throws Exception {	//displays instructions on how to use the program
