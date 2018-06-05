@@ -15,10 +15,12 @@ import java.awt.Toolkit;
 import java.awt.event.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Scanner;
 
+import javax.imageio.ImageIO;
 import javax.mail.*;
 
 public class GUI extends JFrame implements ActionListener, FocusListener, KeyListener{
@@ -136,7 +138,13 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 		msgPanel.getVerticalScrollBar().setUnitIncrement(16);
 		msgPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		
-		setIconImage(Toolkit.getDefaultToolkit().getImage("Resources/Logo.png"));
+		InputStream icon = GUI.class.getResourceAsStream("Logo.png");
+		try {
+			setIconImage(ImageIO.read(icon));
+		}
+		catch (Exception e){
+			setIconImage(Toolkit.getDefaultToolkit().getImage("Resources/Logo.png"));
+		}
 		
 		this.pack();
 	}
@@ -214,7 +222,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 		}
 	}
 	
-	public void addFile() {
+	public void addFile() throws Exception{
 		String file;
 		int returnVal = fc.showOpenDialog(this);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -274,21 +282,15 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 		}
 	}
 	
-	public void showHelpMessage() {	//displays instructions on how to use the program
+	public void showHelpMessage() throws Exception {	//displays instructions on how to use the program
 		JPanel helpPanel = new JPanel();
 		
-		Scanner helpFile;				//Read help text from resources folder
-		try {
-			helpFile = new Scanner(new File("Resources/help.txt"));
-		} catch (FileNotFoundException e) {
-			display("Error finding help dialog.");
-			return;
-		}
+		Scanner fileReader = new Scanner(GUI.class.getResourceAsStream("help.txt"));	//Read help text from resources folder
 		String helpFileContents = "";
-		while(helpFile.hasNextLine()) {
-			helpFileContents += ("      " + helpFile.nextLine() + "\n");
+		while(fileReader.hasNextLine()) {
+			helpFileContents += ("      " + fileReader.nextLine() + "\n");
 		}
-		helpFile.close();
+		fileReader.close();
 		
 		JTextArea helpMessage = new JTextArea(helpFileContents);
 		helpMessage.setLineWrap(true);
@@ -309,10 +311,21 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 			login();
 		}
 		else if(src == chooseFileBtn) {	//choosing file
-			addFile();			
+			try {
+				addFile();	
+			}
+			catch(Exception ex) {
+				display("Please select a MER file.");
+			}		
 		}
 		else if(src == helpBtn) {
-			showHelpMessage();
+			try {
+				showHelpMessage();
+			}
+			catch (Exception ex) {
+				ex.printStackTrace();
+				display("Error finding help text.");
+			}
 		}
 		else if(src == selectAllBtn) {		//select all teachers
 			selectAll(true);
