@@ -299,7 +299,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 		JScrollPane helpScrollPane = new JScrollPane(helpMessage);
 		helpScrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		helpScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		helpScrollPane.setPreferredSize(new Dimension(500, 400));
+		helpScrollPane.setPreferredSize(new Dimension(800, 600));
 		
 		helpPanel.add(helpScrollPane);
 		JOptionPane.showMessageDialog(this, helpPanel, "Help", JOptionPane.PLAIN_MESSAGE);
@@ -315,7 +315,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 				addFile();	
 			}
 			catch(Exception ex) {
-				display("Please select a MER file.");
+				display("Please select a correctly formatted MER file. For the correct format, refer to Step two of HELP.");
 			}		
 		}
 		else if(src == helpBtn) {
