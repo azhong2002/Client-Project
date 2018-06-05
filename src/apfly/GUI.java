@@ -283,7 +283,10 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 					}
 				}
 			}
-			display("\nFinished email batch. Failed to send to " + fails);
+			display("\nFinished email batch.");
+			if(fails.length() > 0) {
+				display("Failed to send to " + fails);
+			}
 		}
 	}
 	

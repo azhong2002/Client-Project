@@ -71,7 +71,7 @@ public class DataReader {
 	public static void main(String[] args) {		//for testing purposes
 		ArrayList<Teacher> teachers = readData("test_data.mer");
 		try {
-		teachers.get(0).makePDF("");
+		teachers.get(0).makePDF();
 		}
 		catch (Exception e){
 			e.printStackTrace();

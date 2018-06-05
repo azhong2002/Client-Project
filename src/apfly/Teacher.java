@@ -118,12 +118,12 @@ public class Teacher {
 		return name;
 	}
 	
-	public String makePDF(String path) throws IOException, DocumentException{	//makes PDF w/ table of exam registries and returns its path
+	public String makePDF() throws IOException, DocumentException{	//makes PDF w/ table of exam registries and returns its path
 		Collections.sort(examList, (String[] item1, String[] item2) -> item1[1].compareTo(item2[1]));
 		Collections.sort(examList, (String[] item1, String[] item2) -> item1[2].compareTo(item2[2]));
 		Collections.sort(examList, (String[] item1, String[] item2) -> item1[4].compareTo(item2[4]));	//sort by test, period, and name
 																										//in that order
-		String fileName = path + name + "_AP_Registration.pdf";
+		String fileName = name + "_AP_Registration.pdf";
 		Document doc = new Document();
 		PdfWriter.getInstance(doc, new FileOutputStream(fileName));	//makes doc to edit
 		doc.open();
@@ -187,7 +187,7 @@ public class Teacher {
 		return out;
 	}
 
-	public void sendEmail(String user, String pass, String customMessage, String path) throws MessagingException, IOException, DocumentException{	//sends PDF w/ email
+	public void sendEmail(String user, String pass, String customMessage) throws MessagingException, IOException, DocumentException{	//sends PDF w/ email
 		Properties prop = new Properties();
 		
 		String smtp = "smtp.gmail.com";
@@ -230,7 +230,7 @@ public class Teacher {
 		multipart.addBodyPart(msgBody);
 		System.out.println("Text added");
 		
-		String filePath = makePDF(path);	//attach and make PDF file
+		String filePath = makePDF();	//attach and make PDF file
 		
 		MimeBodyPart attachPart = new MimeBodyPart();	//Add attachment bodypart
         try {
@@ -248,6 +248,11 @@ public class Teacher {
 		long start = System.nanoTime();
 		Transport.send(msg);
 		System.out.printf("Message sent in %f seconds.\n", (System.nanoTime() - start)/1000000000.0);
+		
+		File doc = new File(filePath);
+		if(doc.delete()) {
+			System.out.println("Deleted " + filePath);
+		}
 	}
 	
 }
