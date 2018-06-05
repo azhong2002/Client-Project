@@ -13,8 +13,12 @@ import java.awt.Image;
 import java.awt.Panel;
 import java.awt.Toolkit;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.Scanner;
+
 import javax.mail.*;
 
 public class GUI extends JFrame implements ActionListener, FocusListener, KeyListener{
@@ -132,7 +136,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 		msgPanel.getVerticalScrollBar().setUnitIncrement(16);
 		msgPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		
-		setIconImage(Toolkit.getDefaultToolkit().getImage("Logo.png"));
+		setIconImage(Toolkit.getDefaultToolkit().getImage("Resources/Logo.png"));
 		
 		this.pack();
 	}
@@ -272,14 +276,30 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 	
 	public void showHelpMessage() {	//displays instructions on how to use the program
 		JPanel helpPanel = new JPanel();
-		JTextArea helpMessage = new JTextArea("Welcome to the APFly Application produced by Firefly Software (2018)!" + 
-				" The following is an in depth description of what the application is, what it can do, and how to use it. "
-				+ "APFly is an automatic file sorting, compiling, and sending application designed to make sending notification "
-				+ "emails about the status of their AP class or classes participation in the AP test.");
-		helpMessage.setPreferredSize(new Dimension(500, 400));
+		
+		Scanner helpFile;				//Read help text from resources folder
+		try {
+			helpFile = new Scanner(new File("Resources/help.txt"));
+		} catch (FileNotFoundException e) {
+			display("Error finding help dialog.");
+			return;
+		}
+		String helpFileContents = "";
+		while(helpFile.hasNextLine()) {
+			helpFileContents += ("      " + helpFile.nextLine() + "\n");
+		}
+		helpFile.close();
+		
+		JTextArea helpMessage = new JTextArea(helpFileContents);
 		helpMessage.setLineWrap(true);
 		helpMessage.setWrapStyleWord(true);
-		helpPanel.add(helpMessage);
+		
+		JScrollPane helpScrollPane = new JScrollPane(helpMessage);
+		helpScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+		helpScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		helpScrollPane.setPreferredSize(new Dimension(500, 400));
+		
+		helpPanel.add(helpScrollPane);
 		JOptionPane.showMessageDialog(this, helpPanel, "Help", JOptionPane.PLAIN_MESSAGE);
 	}
 	
