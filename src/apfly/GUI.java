@@ -276,6 +276,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 					catch(Exception ex) {
 						display("Error sending " + tPanel + "'s message.\n");
 						display(ex.getMessage());
+						ex.printStackTrace();
 						if(fails.length() > 0) {
 							fails += ", ";
 						}

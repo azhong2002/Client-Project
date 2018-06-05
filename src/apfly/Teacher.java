@@ -94,7 +94,7 @@ public class Teacher {
 	public int[] countRegistered(int period){	//registration per class as tuple (registered, total)
 		int[] count = new int[2];
 		for(String[] item : examList){
-			if(Integer.parseInt(item[2]) == period) {
+			if(isInt(item[2]) && Integer.parseInt(item[2]) == period) {
 				count[1]++;
 				if(item[5].trim().toLowerCase().equals("yes")){
 					count[0]++;
@@ -116,6 +116,16 @@ public class Teacher {
 	
 	public String toString() {
 		return name;
+	}
+	
+	public boolean isInt(String s) {
+		try {
+			Integer.parseInt(s);
+			return true;
+		}
+		catch(Exception e) {
+			return false;
+		}
 	}
 	
 	public String makePDF() throws IOException, DocumentException{	//makes PDF w/ table of exam registries and returns its path
@@ -145,7 +155,7 @@ public class Teacher {
 		table.setWidths(new float[] { 5, 18, 2, 10, 10, 3});
 		int currentPeriod = 0;
 		for(String[] item : examList){	//Adds all exam items as rows of their data
-			if(currentPeriod != Integer.parseInt(item[2])){	//if it's a new class, add an information header 
+			if(isInt(item[2]) && currentPeriod != Integer.parseInt(item[2])){	//if it's a new class, add an information header 
 				currentPeriod = Integer.parseInt(item[2]);
 				
 				int[] registered = countRegistered(currentPeriod);	//gets tuple per period (registered, total)
