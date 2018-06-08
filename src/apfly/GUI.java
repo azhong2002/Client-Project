@@ -54,7 +54,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 	ArrayList<TeacherPanel> teacherPanelList = new ArrayList<TeacherPanel>();
 	private JPanel teacherPanelHolder = new JPanel();
 	private JScrollPane teacherViewPane = new JScrollPane(teacherPanelHolder);
-	private JLabel dupEmailNote = new JLabel("Teachers that share names will have their email colored red.");
+	private JLabel dupEmailNote = new JLabel("Emails will be colored red for teachers whose emails were not found and teachers who share names.");
 	
 	//SEND OPTIONS
 	private JButton sendBtn = new JButton("Send");

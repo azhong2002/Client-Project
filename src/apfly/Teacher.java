@@ -46,14 +46,15 @@ public class Teacher {
         if(source.indexOf(name + "</p>") == -1) {
         	teacherEmail = defaultEmail;
         	uniqueEmail = false;
+        	if(source.indexOf(name + "</p>", source.indexOf("\">", start)) != -1) {		//checks from end of first email for any staff of the same name
+        		uniqueEmail = false;
+            }
         } else {
         	teacherEmail = source.substring(start + 7, source.indexOf("\">", start));
         	uniqueEmail = true;
         }
         
-        if(source.indexOf(name + "</p>", source.indexOf("\">", start)) != -1) {		//checks from end of first email for any staff of the same name
-        	uniqueEmail = false;
-        }
+       
         
         in.close();
 	}
