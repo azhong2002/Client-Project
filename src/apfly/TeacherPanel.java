@@ -53,6 +53,9 @@ public class TeacherPanel extends JPanel implements ActionListener, FocusListene
 		
 		emailDisplay = new JLabel(teacher.teacherEmail);
 		emailDisplay.setPreferredSize(new Dimension(200, 25));
+		if(!teacher.uniqueEmail) {
+			emailDisplay.setForeground(Color.red);
+		}
 		bot.add(emailDisplay, BorderLayout.WEST);
 		bot.add(changeEmailBtn, BorderLayout.EAST);
 		changeEmailBtn.addActionListener(this);

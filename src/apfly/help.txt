@@ -20,6 +20,9 @@ There is no limit to the size of the file uploaded, but the larger the file, the
 Step 3: Selecting teachers and writing messages
 
 After a file is successfully uploaded, the left window will fill with the boxes, each with the name of a teacher, their email and a button to change their email if incorrect, a checkbox, and a message box to send individually to that teacher. If no email is found on the online staff directory website, the user’s email will be chosen as the default. The checkbox is to select or deselect certain teacher from receiving the email when the user hits “Send” and the message box for each teacher can be left blank if no individual message is necessary. There is also a message box in the bottom of the screen which the user can enter a message into to send to all recipients. The sent-to-all message will appear first in the body of the email, then the individual message after a line break. There are “Select All” and “Deselect All” which simply check or uncheck every teacher’s checkbox.
+
+Teachers that share the provided name with another teacher will have red emails.
+
 The default message that is sent to all teachers is the following:
 "Attached is a PDF containing the AP Registration information for your students. This is an automated email of APFly, the AP Registration notification app by Firefly Software."
 

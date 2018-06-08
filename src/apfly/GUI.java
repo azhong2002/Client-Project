@@ -28,6 +28,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 	//organizational panels
 	private Panel north = new Panel();	
 	private Panel center = new Panel();
+	private Panel teachPanel = new Panel();
 	private Panel south = new Panel();
 
 	//LOGIN
@@ -53,6 +54,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 	ArrayList<TeacherPanel> teacherPanelList = new ArrayList<TeacherPanel>();
 	private JPanel teacherPanelHolder = new JPanel();
 	private JScrollPane teacherViewPane = new JScrollPane(teacherPanelHolder);
+	private JLabel dupEmailNote = new JLabel("Teachers that share names will have their email colored red.");
 	
 	//SEND OPTIONS
 	private JButton sendBtn = new JButton("Send");
@@ -105,7 +107,11 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 		helpBtn.addActionListener(this);
 		
 		//TEACHERLIST
-		center.add(teacherViewPane, BorderLayout.NORTH);
+		teachPanel.setLayout(new BorderLayout());
+		teachPanel.add(teacherViewPane, BorderLayout.NORTH);
+		teachPanel.add(dupEmailNote, BorderLayout.SOUTH);
+		dupEmailNote.setForeground(Color.red);
+		center.add(teachPanel, BorderLayout.NORTH);
 		teacherViewPane.setPreferredSize(new Dimension(600,500));
 		teacherViewPane.getVerticalScrollBar().setUnitIncrement(16);
 		teacherPanelHolder.setLayout(new GridLayout(0,1));
@@ -131,7 +137,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 		
 		//MESSAGES
 		center.add(msgPanel, BorderLayout.WEST);	//Message panel
-		msgPanel.setPreferredSize(new Dimension(650,500));
+		msgPanel.setPreferredSize(new Dimension(650,530));
 		messages.setEditable(false);
 		messages.setLineWrap(true);
 		messages.setWrapStyleWord(true);

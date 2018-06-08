@@ -26,27 +26,35 @@ public class Teacher {
 	public ArrayList<String[]> examList;
 	public String name = "no_name";
 	public String teacherEmail;	//email address of teacher
+	public boolean uniqueEmail;
 	
 	public Teacher() {
 		examList = new ArrayList<String[]>();
 	}
 	
-	public void setEmail() throws Exception{
+	public void setEmail() throws Exception{	//finds the teacher's email from the staff directory
 		URL staffDir = new URL("http://www.montgomeryschoolsmd.org/schools/poolesvillehs/staff/directory.aspx");	//TODO customize
         BufferedReader in = new BufferedReader(
         new InputStreamReader(staffDir.openStream()));
 
         String source = "";
         String inputLine;
-        while ((inputLine = in.readLine()) != null) {
+        while ((inputLine = in.readLine()) != null) {	//reads source code and stores it as a string
         	source += inputLine;
         }
         int start = source.indexOf("mailto:",source.indexOf(name + "</p>"));
         if(source.indexOf(name + "</p>") == -1) {
         	teacherEmail = defaultEmail;
+        	uniqueEmail = false;
         } else {
         	teacherEmail = source.substring(start + 7, source.indexOf("\">", start));
+        	uniqueEmail = true;
         }
+        
+        if(source.indexOf(name + "</p>", source.indexOf("\">", start)) != -1) {		//checks from end of first email for any staff of the same name
+        	uniqueEmail = false;
+        }
+        
         in.close();
 	}
 	
