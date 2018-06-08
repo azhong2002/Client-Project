@@ -23,6 +23,7 @@ import javax.mail.internet.*;
 public class Teacher {
 
 	public static String defaultEmail = "Debra_L_Dresser@mcpsmd.org";
+	public static String staffDirLink = "http://www.montgomeryschoolsmd.org/schools/poolesvillehs/staff/directory.aspx";
 	public ArrayList<String[]> examList;
 	public String name = "no_name";
 	public String teacherEmail;	//email address of teacher
@@ -33,7 +34,7 @@ public class Teacher {
 	}
 	
 	public void setEmail() throws Exception{	//finds the teacher's email from the staff directory
-		URL staffDir = new URL("http://www.montgomeryschoolsmd.org/schools/poolesvillehs/staff/directory.aspx");	//TODO customize
+		URL staffDir = new URL(staffDirLink);	//TODO customize
         BufferedReader in = new BufferedReader(
         new InputStreamReader(staffDir.openStream()));
 

@@ -54,6 +54,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 	ArrayList<TeacherPanel> teacherPanelList = new ArrayList<TeacherPanel>();
 	private JPanel teacherPanelHolder = new JPanel();
 	private JScrollPane teacherViewPane = new JScrollPane(teacherPanelHolder);
+	private JTextField staffDirEntry = new JTextField(); 
 	private JLabel dupEmailNote = new JLabel("Emails will be colored red for teachers whose emails were not found and teachers who share names.");
 	
 	//SEND OPTIONS
@@ -108,14 +109,18 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 		
 		//TEACHERLIST
 		teachPanel.setLayout(new BorderLayout());
-		teachPanel.add(teacherViewPane, BorderLayout.NORTH);
-		teachPanel.add(dupEmailNote, BorderLayout.SOUTH);
-		dupEmailNote.setForeground(Color.red);
-		center.add(teachPanel, BorderLayout.NORTH);
+		teachPanel.add(staffDirEntry, BorderLayout.NORTH);
+		staffDirEntry.addFocusListener(this);
+		staffDirEntry.setForeground(Color.gray);
+		staffDirEntry.setPreferredSize(new Dimension(600,30));
+		teachPanel.add(teacherViewPane, BorderLayout.CENTER);
 		teacherViewPane.setPreferredSize(new Dimension(600,500));
 		teacherViewPane.getVerticalScrollBar().setUnitIncrement(16);
 		teacherPanelHolder.setLayout(new GridLayout(0,1));
 		teacherPanelHolder.addFocusListener(this);
+		teachPanel.add(dupEmailNote, BorderLayout.SOUTH);
+		dupEmailNote.setForeground(Color.red);
+		center.add(teachPanel, BorderLayout.NORTH);
 		
 		//SEND OPTIONS
 		south.add(messageTextScroll, BorderLayout.NORTH);	//Messages to All
@@ -266,6 +271,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 			display("Please log in.");
 		}
 		else {
+			Teacher.staffDirLink = staffDirEntry.getText();
 			String fails = "";
 			for(TeacherPanel tPanel: teacherPanelList) {
 				if(tPanel.isChecked()) {	//send emails to all selected teachers
@@ -364,11 +370,15 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 		if(src == passIn && passIn.getForeground() == Color.gray) {	//removes pass entry hint
 			passIn.setText("");
 			passIn.setForeground(Color.black);
-			passIn.setEchoChar('\u2022');	//unicode for Ã¢â‚¬Â¢ character, hides password
+			passIn.setEchoChar('\u2022');	//unicode for dot character, hides password
 		}
 		if(src == messageText && messageText.getForeground() == Color.gray) {	//if user is empty, resets entry hint
 			messageText.setText("");
 			messageText.setForeground(Color.black);
+		}
+		if(src == staffDirEntry && staffDirEntry.getForeground() == Color.gray) {	//if user is empty, resets entry hint
+			staffDirEntry.setText("");
+			staffDirEntry.setForeground(Color.black);
 		}
         
 	}
@@ -386,6 +396,10 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 		if(src == messageText && messageText.getText().equals("")) {	//if user is empty, resets entry hint
 			messageText.setText("Add Message to All");
 			messageText.setForeground(Color.gray);
+		}
+		if(src == staffDirEntry && staffDirEntry.getText().equals("")) {	//if user is empty, resets entry hint
+			staffDirEntry.setText("http://www.montgomeryschoolsmd.org/schools/poolesvillehs/staff/directory.aspx");
+			staffDirEntry.setForeground(Color.gray);
 		}
 		
 	}
