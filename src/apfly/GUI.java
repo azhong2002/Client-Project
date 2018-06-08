@@ -35,7 +35,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 	private Panel loginEntries = new Panel();
 	private JTextField userIn = new JTextField("Username     ");
 	private JPasswordField passIn = new JPasswordField("Password     ");
-	private JButton loginBtn = new JButton("Log in");
+	private JButton loginBtn = new JButton("Log in to Gmail");
 	private boolean loggedIn = false;
 	String user = "";
 	String pass = "";
@@ -180,7 +180,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 		    int port = 587;
 		    
 		    if(user.indexOf("@outlook.com") != -1 || user.indexOf("@hotmail.com") != -1) {
-		    	smtp = "smtp.live.com";
+		    	smtp = "smtp-mail.outlook.com";
 		    }
 		    else if(user.indexOf("@yahoo.com") != -1){
 		    	smtp = "mail.yahoo.com";
