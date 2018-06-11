@@ -47,15 +47,13 @@ public class Teacher {
         if(source.indexOf(name + "</p>") == -1) {
         	teacherEmail = defaultEmail;
         	uniqueEmail = false;
-        	if(source.indexOf(name + "</p>", source.indexOf("\">", start)) != -1) {		//checks from end of first email for any staff of the same name
-        		uniqueEmail = false;
-            }
         } else {
         	teacherEmail = source.substring(start + 7, source.indexOf("\">", start));
         	uniqueEmail = true;
+        	if(source.indexOf(name + "</p>", source.indexOf("\">", start)) != -1) {		//checks from end of first email for any staff of the same name
+        		uniqueEmail = false;
+            }
         }
-        
-       
         
         in.close();
 	}
@@ -71,7 +69,7 @@ public class Teacher {
 			try {
 				setEmail();
 			} catch (Exception e) {
-				System.out.println("Bad URL for staff directory; unable to retrieve email.");	//TODO fix in UI
+				System.out.println("Bad URL for staff directory; unable to retrieve email.");
 				e.printStackTrace();
 			}
 		}
