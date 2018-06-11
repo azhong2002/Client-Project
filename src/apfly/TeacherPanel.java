@@ -81,9 +81,10 @@ public class TeacherPanel extends JPanel implements ActionListener, FocusListene
 	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == changeEmailBtn) {
-			String newMail = JOptionPane.showInputDialog(this,"Change " + teacher + "'s Email");
+			String newMail = JOptionPane.showInputDialog(this,"Change " + teacher + "'s Email. Teachers with changed emails will have their emails colored blue.");
 			if(newMail.trim().length() > 0) {
 				teacher.teacherEmail = newMail;
+				emailDisplay.setForeground(Color.blue);
 			}
 			emailDisplay.setText(teacher.teacherEmail);
 		}
