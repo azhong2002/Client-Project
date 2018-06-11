@@ -243,7 +243,7 @@ public class Teacher {
 		
 		msg.addRecipient(Message.RecipientType.TO, new InternetAddress(teacherEmail));
 		msg.setFrom(new InternetAddress(user));
-		msg.setSubject("AP Registration Information");
+		msg.setSubject(name + " AP Registration Information");
 		
 		MimeBodyPart msgBody = new MimeBodyPart();	//Add body message bodypart
 		msgBody.setContent(customMessage, "text/html");
