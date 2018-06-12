@@ -35,8 +35,9 @@ public class DataReader {
 		while(reader.hasNextLine()) {	//go through each item
 			String line = reader.nextLine();
 			line = line.substring(1,line.length() - 1); //trim non-delimiter quotation marks
-			exams.add(line.split("\",\""));		//each exam is an array of ID,Alpha_name,PD,TCHL,TestName,APExam
+			String delim = "\",\"";				//      "," delimeter
 			
+			exams.add(line.split(delim));		//each exam is an array of ID,Alpha_name,PD,TCHL,TestName,APExam
 		}
 		
 		for(String[] item : exams){
