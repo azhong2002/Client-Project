@@ -179,6 +179,9 @@ public class Teacher {
 				table.addCell(createHeaderCell(""));
 				
 	            table.completeRow();	//go to new row
+	            for(String data : item) {
+					table.addCell(new Paragraph(data,font));
+				}
 			}
 			else if(item[2].equals("")) {				//if no period is given
 				noPeriod.add(item);
