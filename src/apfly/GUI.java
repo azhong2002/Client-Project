@@ -336,6 +336,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 				addFile();	
 			}
 			catch(Exception ex) {
+				ex.printStackTrace();
 				display("Please select a correctly formatted MER file. For the correct format, refer to Step two of HELP.");
 			}		
 		}
