@@ -36,20 +36,7 @@ public class DataReader {
 			String line = reader.nextLine();
 			line = line.substring(1,line.length() - 1); //trim non-delimiter quotation marks
 			String delim = "\",\"";				//      "," delimeter
-			
-			exams.add(line.split(delim));		//each exam is an array of ID,Alpha_name,PD,TCHL,TestName,APExam
-		}
-		
-		for(String[] item : exams){
-			try{
-				String s = item[3];
-			}
-			catch (Exception e){
-				for(String s : item){
-					System.out.print(s + "-");
-				}
-				System.out.println();
-			}
+			exams.add(split(line, delim));		//each exam is an array of ID,Alpha_name,PD,TCHL,TestName,APExam
 		}
 		
 		System.out.println(exams.size());
@@ -64,9 +51,10 @@ public class DataReader {
 			while(lastSame < exams.size() && exams.get(lastSame)[3].equals(name)) {	//goes to last item with this teacher
 				lastSame++;
 			}
-			if(name.indexOf("No ") == 0 || name.indexOf("no ") == 0){	//if no teacher
+			if(name.indexOf("No ") == 0 || name.indexOf("no ") == 0 || name.trim().equals("")){	//if no teacher
+				System.out.println(name);
 				noTeach.addAll(new ArrayList<String[]>(exams.subList(ind, lastSame)));
-			} 
+			}
 			else{
 				teachList.add(new Teacher(new ArrayList<String[]>(exams.subList(ind, lastSame))));	//make new Teacher object
 			}
@@ -81,6 +69,25 @@ public class DataReader {
 		
 		reader.close();
 		return teachList;
+	}
+	
+	public static String[] split(String s, String d) {	//splits s with delimiter d and returns list of strings
+		ArrayList<String> data = new ArrayList<String>();
+		int i;
+		for(i = 0; s.indexOf(d, i + 1) != -1; i = s.indexOf(d, i + 1)) {	//i is start of delimiter and find next instance of d
+			String metaData = s.substring(i, s.indexOf(d, i + 1));
+			if(metaData.indexOf(d) == 0) {
+				metaData = metaData.substring(d.length());
+			}
+			data.add(metaData);
+		}
+		data.add(s.substring(i + 3));					//no delimiter at end, have to manually get the rest
+		
+		String[] output = new String[data.size()];	//move arraylist data to array
+		for(i = 0; i < data.size(); i++) {
+			output[i] = data.get(i);
+		}
+		return output;
 	}
 
 	public static void main(String[] args) {		//for testing purposes

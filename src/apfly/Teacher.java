@@ -61,7 +61,7 @@ public class Teacher {
 	public Teacher(ArrayList<String[]> examParam) {	//preconditon examParam has a first element
 		examList = examParam;
 		name = examList.get(0)[3];
-		if(name.length() >= 10 && name.substring(0,10).equals("No Teacher")){
+		if(name.indexOf("No ") == 0 || name.indexOf("no ") == 0 || name.trim().equals("")){
 			name = "No Teacher";
 			teacherEmail = defaultEmail;
 		}
@@ -162,6 +162,9 @@ public class Teacher {
 		table.setWidthPercentage(100);
 		table.setWidths(new float[] { 5, 18, 2, 10, 10, 3});
 		int currentPeriod = 0;
+		
+		ArrayList<String[]> noPeriod = new ArrayList<String[]>();
+		
 		for(String[] item : examList){	//Adds all exam items as rows of their data
 			if(isInt(item[2]) && currentPeriod != Integer.parseInt(item[2])){	//if it's a new class, add an information header 
 				currentPeriod = Integer.parseInt(item[2]);
@@ -177,11 +180,24 @@ public class Teacher {
 				
 	            table.completeRow();	//go to new row
 			}
-			for(String data : item) {
-				table.addCell(new Paragraph(data,font));
+			else if(item[2].equals("")) {				//if no period is given
+				noPeriod.add(item);
+			}
+			else {
+				for(String data : item) {
+					table.addCell(new Paragraph(data,font));
+				}
 			}
             table.completeRow();	//go to new row
         }
+		for(String[] item : noPeriod) {
+			for(String data : item) {
+				table.addCell(new Paragraph(data,font));
+			}
+			table.completeRow();
+		}
+		
+		
 		
 		header.setSpacingAfter(12f);	//intertable space
 		
