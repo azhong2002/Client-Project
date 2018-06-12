@@ -271,6 +271,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 			display("Please log in.");
 		}
 		else {
+			display("Sending...");
 			Teacher.staffDirLink = staffDirEntry.getText();
 			String fails = "";
 			for(TeacherPanel tPanel: teacherPanelList) {
