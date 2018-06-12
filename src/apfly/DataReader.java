@@ -39,6 +39,20 @@ public class DataReader {
 			
 		}
 		
+		for(String[] item : exams){
+			try{
+				String s = item[3];
+			}
+			catch (Exception e){
+				for(String s : item){
+					System.out.print(s + "-");
+				}
+				System.out.println();
+			}
+		}
+		
+		System.out.println(exams.size());
+		
 		Collections.sort(exams, (String[] item1, String[] item2) -> item1[3].compareTo(item2[3]));	//sort by teacher
 		
 		ArrayList<String[]> noTeach = new ArrayList<String[]>();
@@ -49,7 +63,7 @@ public class DataReader {
 			while(lastSame < exams.size() && exams.get(lastSame)[3].equals(name)) {	//goes to last item with this teacher
 				lastSame++;
 			}
-			if(name.length() >= 10 && name.substring(0,10).equals("No Teacher")){	//if no teacher
+			if(name.indexOf("No ") == 0 || name.indexOf("no ") == 0){	//if no teacher
 				noTeach.addAll(new ArrayList<String[]>(exams.subList(ind, lastSame)));
 			} 
 			else{
