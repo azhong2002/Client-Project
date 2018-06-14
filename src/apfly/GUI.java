@@ -1,7 +1,8 @@
 package apfly;
 
 //Andrew Zhong 5/23/18 APFLy GUI
-//TODO : implement noTeacher email customization, FileUpload, send method
+//Main program that users will interact with
+//Allows the user to email PDF's with AP registration information based on a given database (in MER format)
 
 import javax.swing.*;
 
@@ -34,9 +35,9 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 	//LOGIN
 	private Panel login = new Panel();
 	private Panel loginEntries = new Panel();
-	private JTextField userIn = new JTextField("Username     ");
-	private JPasswordField passIn = new JPasswordField("Password     ");
-	private JButton loginBtn = new JButton("Log in to Gmail");
+	private JTextField userIn = new JTextField("Username     ");				//email address field
+	private JPasswordField passIn = new JPasswordField("Password     ");		//password field
+	private JButton loginBtn = new JButton("Log in to Gmail");					//Login Button
 	private boolean loggedIn = false;
 	String user = "";
 	String pass = "";
@@ -50,12 +51,12 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 	private JButton helpBtn = new JButton("Help");
 	
 	//TEACHER LIST
-	private ArrayList<Teacher> teachList = new ArrayList<Teacher>();
-	ArrayList<TeacherPanel> teacherPanelList = new ArrayList<TeacherPanel>();
-	private JPanel teacherPanelHolder = new JPanel();
+	private ArrayList<Teacher> teachList = new ArrayList<Teacher>();								//arraylist of all teacher objects
+	ArrayList<TeacherPanel> teacherPanelList = new ArrayList<TeacherPanel>();						//arraylist of all teacherPanels
+	private JPanel teacherPanelHolder = new JPanel();												//Holds all teacher panels so they can be put in the scrollable view pane
 	private JScrollPane teacherViewPane = new JScrollPane(teacherPanelHolder);
-	private JTextField staffDirEntry = new JTextField("http://www.montgomeryschoolsmd.org/schools/poolesvillehs/staff/directory.aspx"); 
-	private JLabel dupEmailNote = new JLabel("Emails will be colored red for teachers whose emails were not found and teachers who share names.");
+	private JTextField staffDirEntry = new JTextField("http://www.montgomeryschoolsmd.org/schools/poolesvillehs/staff/directory.aspx"); 	//staff directory URL field
+	private JLabel dupEmailNote = new JLabel("Emails will be colored red for teachers whose emails were not found and teachers who share names.");	//notification
 	
 	//SEND OPTIONS
 	private JButton sendBtn = new JButton("Send");
@@ -64,11 +65,11 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 	public JTextArea messageText = new JTextArea("Add Message to All");
 	public JScrollPane messageTextScroll = new JScrollPane(messageText);
 	
-	//MESSAGES
+	//MESSAGES - to update user on program status
 	private JTextArea messages = new JTextArea("Messages: \n");
 	private JScrollPane msgPanel = new JScrollPane(messages);
 	
-	public GUI(String title) {
+	public GUI(String title) {				//add in and format all components from above ^
 		super(title);
 		setSize(600,600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -99,7 +100,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 		loginBtn.addActionListener(this);
 		
 		//FILEUPLOAD
-		north.add(fileUpload, BorderLayout.EAST);	//fileupload button
+		north.add(fileUpload, BorderLayout.EAST);	//file upload button
 		fileUpload.add(chooseFileBtn, BorderLayout.NORTH);
 		chooseFileBtn.addActionListener(this);
 		
@@ -165,7 +166,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 			teacherPanelHolder.remove(tP);
 		}
 		teacherPanelList.clear();
-		for (Teacher t: teachList) {
+		for (Teacher t: teachList) {		//create new teacher panel list
 			TeacherPanel tPanel = new TeacherPanel(t);
 			teacherPanelList.add(tPanel);
 			teacherPanelHolder.add(tPanel);
@@ -178,7 +179,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 		messages.setText(messages.getText() + "\n" + msg);
 	}
 	
-	public boolean loginCheck(String user, String pass) {
+	public boolean loginCheck(String user, String pass) {			//attempts to connect to the smtp server with the given credentials to check validity
 		try {
 			Properties props = new Properties();
 			// required for gmail 
@@ -213,7 +214,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 		}
 	}
 	
-	public void login() {
+	public void login() {		//sets email address and password if they are valid
 		if(userIn.getForeground() != Color.gray && passIn.getForeground() != Color.gray){
 			if(loginCheck(userIn.getText(),new String(passIn.getPassword()))) {
 				user = userIn.getText();
@@ -233,7 +234,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 		}
 	}
 	
-	public void addFile() throws Exception{
+	public void addFile() throws Exception{		//tries to read the data from the MER file and make the teacher list from it
 		String file;
 		int returnVal = fc.showOpenDialog(this);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -247,12 +248,12 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
             	}
             	teachList.add(inp);
             }
-            setTeachers(teachList);
+            setTeachers(teachList);				//updates teacher panels
             display("Retrieved data from " + file + "\n");
 		}
 	}
 	
-	public void selectAll(boolean newCheck) {
+	public void selectAll(boolean newCheck) {		//selects/deselects all teacher panels for sending
 		if(teacherPanelList.size() == 0) {
 			display("Please select a MER file.");
 		}
@@ -263,7 +264,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 		}
 	}
 	
-	public void sendEmails() {
+	public void sendEmails() {			//attempts to send all emails
 		if(teacherPanelList.size() == 0) {
 			display("Please select a MER file.");
 		}
@@ -298,7 +299,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 				}
 			}
 			display("\nFinished email batch.");
-			if(fails.length() > 0) {
+			if(fails.length() > 0) {				//reports on any emails that failed to send
 				display("Failed to send to " + fails);
 			}
 		}
@@ -314,7 +315,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 		}
 		fileReader.close();
 		
-		JTextArea helpMessage = new JTextArea(helpFileContents);
+		JTextArea helpMessage = new JTextArea(helpFileContents);		//make help panel based on text
 		helpMessage.setLineWrap(true);
 		helpMessage.setWrapStyleWord(true);
 		
@@ -324,7 +325,7 @@ public class GUI extends JFrame implements ActionListener, FocusListener, KeyLis
 		helpScrollPane.setPreferredSize(new Dimension(800, 600));
 		
 		helpPanel.add(helpScrollPane);
-		JOptionPane.showMessageDialog(this, helpPanel, "Help", JOptionPane.PLAIN_MESSAGE);
+		JOptionPane.showMessageDialog(this, helpPanel, "Help", JOptionPane.PLAIN_MESSAGE);	//display panel as popup
 	}
 	
 	public void actionPerformed(ActionEvent e) {

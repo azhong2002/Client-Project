@@ -1,6 +1,7 @@
 package apfly;
 
-//Panel for each teacher; contains name, email, checkbox to send, and button to change email
+//Andrew Zhong
+//Panel Object as a container for Teacher object; contains name, email, checkbox to send, and button to change email
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -18,19 +19,19 @@ import com.itextpdf.text.DocumentException;
 
 public class TeacherPanel extends JPanel implements ActionListener, FocusListener{
 	
-	private JPanel top = new JPanel();
+	private JPanel top = new JPanel();		//organizational panels
 	private JPanel bot = new JPanel();
 	
-	private Teacher teacher;
-	private JCheckBox checkBox = new JCheckBox();
-	private JButton changeEmailBtn = new JButton("Change Email");
-	private JLabel nameDisplay;
-	private JLabel emailDisplay;
-	public JTextArea customText = new JTextArea("Custom Add-on Message");
-	public JScrollPane customTextScroll = new JScrollPane(customText);
-	private String name;
+	private Teacher teacher;												//Teacher object
+	private JCheckBox checkBox = new JCheckBox();							//Checkbox for selection
+	private JButton changeEmailBtn = new JButton("Change Email");			//popup button to change email
+	private JLabel nameDisplay;												//Shows teacher's name
+	private JLabel emailDisplay;											//shows current email		
+	public JTextArea customText = new JTextArea("Custom Add-on Message");	//custom message field
+	public JScrollPane customTextScroll = new JScrollPane(customText);		//Scrollpane for custom messages
+	private String name;													//teacher name
 	
-	TeacherPanel(Teacher t){
+	TeacherPanel(Teacher t){			//set values for all components
 		teacher = t;
 		name = teacher.name;
 
@@ -63,15 +64,15 @@ public class TeacherPanel extends JPanel implements ActionListener, FocusListene
 		setBorder(BorderFactory.createLineBorder(Color.black));
 	}
 	
-	public void check(boolean newVal) {
+	public void check(boolean newVal) {				//change whether or not this teacher is selected
 		checkBox.setSelected(newVal);
 	}
 	
-	public boolean isChecked() {
+	public boolean isChecked() {					//returns if the teacher is selected
 		return checkBox.isSelected();
 	}
 	
-	public void sendEmail(String user, String pass, String messageToAll) throws MessagingException, IOException, DocumentException {
+	public void sendEmail(String user, String pass, String messageToAll) throws MessagingException, IOException, DocumentException {	//tells Teacher object to send email
 		String customMsg = "";
 		if(customText.getForeground() == Color.black) {
 			customMsg = customText.getText();
@@ -79,10 +80,10 @@ public class TeacherPanel extends JPanel implements ActionListener, FocusListene
 		teacher.sendEmail(user, pass, messageToAll + "<br />" + customMsg);	//use br; email text is formatted as html
 	}
 	
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent e) {		//action when the email change button is pressed
 		if (e.getSource() == changeEmailBtn) {
-			String newMail = JOptionPane.showInputDialog(this,"Change " + teacher + "'s Email. Teachers with changed emails will have their emails colored blue.");
-			if(newMail.trim().length() > 0) {
+			String newMail = JOptionPane.showInputDialog(this,"Change " + teacher + "'s Email. Teachers with changed emails will have their emails colored blue.");	//prompts user
+			if(newMail.trim().length() > 0) {		//If something is provided, set the new email
 				teacher.teacherEmail = newMail;
 				emailDisplay.setForeground(Color.blue);
 			}
@@ -95,13 +96,14 @@ public class TeacherPanel extends JPanel implements ActionListener, FocusListene
 		return name;
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) {	//testing
 		JFrame frame = new JFrame();
 		frame.add(new TeacherPanel(DataReader.readData("test_data.mer").get(0)));
 		frame.pack();
 		frame.setVisible(true);
 	}
 
+	//Custom Message field hints in gray text
 	@Override
 	public void focusGained(FocusEvent fe) {
 		Object src = fe.getSource();

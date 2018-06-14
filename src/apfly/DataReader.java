@@ -27,7 +27,7 @@ public class DataReader {
 		try {								//create file reader
 			reader = new Scanner(file);
 		}
-		catch(FileNotFoundException e){		//TODO
+		catch(FileNotFoundException e){	
 			reader = new Scanner("FileNotFound");
 		}
 		reader.nextLine();
@@ -51,7 +51,7 @@ public class DataReader {
 			while(lastSame < exams.size() && exams.get(lastSame)[3].equals(name)) {	//goes to last item with this teacher
 				lastSame++;
 			}
-			if(name.indexOf("No ") == 0 || name.indexOf("no ") == 0 || name.trim().equals("")){	//if no teacher
+			if(name.indexOf("No ") == 0 || name.indexOf("no ") == 0 || name.trim().equals("")){	//if no teacher, add to array for the end
 				System.out.println(name);
 				noTeach.addAll(new ArrayList<String[]>(exams.subList(ind, lastSame)));
 			}
@@ -65,13 +65,13 @@ public class DataReader {
 		if(noTeach.size() > 0) {
 			teachList.add(new Teacher(noTeach));
 		}
-		Collections.sort(teachList, (Teacher t1, Teacher t2) -> t1.name.compareTo(t2.name));	//sort by teacher
+		Collections.sort(teachList, (Teacher t1, Teacher t2) -> t1.name.compareTo(t2.name));	//sort teachers alphabetically
 		
 		reader.close();
 		return teachList;
 	}
 	
-	public static String[] split(String s, String d) {	//splits s with delimiter d and returns list of strings
+	public static String[] split(String s, String d) {	//splits s with delimiter d and returns list of strings, string.split() didn't work b/c of consecutive delimiters
 		ArrayList<String> data = new ArrayList<String>();
 		int i;
 		for(i = 0; s.indexOf(d, i + 1) != -1; i = s.indexOf(d, i + 1)) {	//i is start of delimiter and find next instance of d

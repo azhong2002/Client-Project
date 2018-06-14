@@ -22,7 +22,7 @@ import javax.mail.internet.*;
 
 public class Teacher {
 
-	public static String defaultEmail = "Debra_L_Dresser@mcpsmd.org";
+	public static String defaultEmail = "Debra_L_Dresser@mcpsmd.org";	//static values used by all teachers during constructor and email finding
 	public static String staffDirLink = "http://www.montgomeryschoolsmd.org/schools/poolesvillehs/staff/directory.aspx";
 	public ArrayList<String[]> examList;
 	public String name = "no_name";
@@ -34,7 +34,7 @@ public class Teacher {
 	}
 	
 	public void setEmail() throws Exception{	//finds the teacher's email from the staff directory
-		URL staffDir = new URL(staffDirLink);	//TODO customize
+		URL staffDir = new URL(staffDirLink);
         BufferedReader in = new BufferedReader(
         new InputStreamReader(staffDir.openStream()));
 
@@ -44,7 +44,7 @@ public class Teacher {
         	source += inputLine;
         }
         int start = source.indexOf("mailto:",source.indexOf(name + "</p>"));
-        if(source.indexOf(name + "</p>") == -1) {
+        if(source.indexOf(name + "</p>") == -1) {	//checks to see if there are any other entries of the teacher's last name
         	teacherEmail = defaultEmail;
         	uniqueEmail = false;
         } else {
@@ -61,12 +61,12 @@ public class Teacher {
 	public Teacher(ArrayList<String[]> examParam) {	//preconditon examParam has a first element
 		examList = examParam;
 		name = examList.get(0)[3];
-		if(name.indexOf("No ") == 0 || name.indexOf("no ") == 0 || name.trim().equals("")){
+		if(name.indexOf("No ") == 0 || name.indexOf("no ") == 0 || name.trim().equals("")){		//checks if the teacher name is not provided
 			name = "No Teacher";
 			teacherEmail = defaultEmail;
 		}
 		else {
-			try {
+			try {	//try to find the email on the staff directory
 				setEmail();
 			} catch (Exception e) {
 				System.out.println("Bad URL for staff directory; unable to retrieve email.");
@@ -75,7 +75,7 @@ public class Teacher {
 		}
 	}
 	
-	public void addAll(ArrayList<String[]> newData) {	//adds all new entries, no longer used
+	public void addAll(ArrayList<String[]> newData) {	//adds all new entries
 		for(String[] item: newData) {
 			boolean isNew = true;
 			for(String[] oldItem : examList) {
@@ -89,7 +89,7 @@ public class Teacher {
 		}
 	}
 	
-	public int countRegistered(){
+	public int countRegistered(){	//counts all the entries registered for the test for this teacher
 		int count = 0;
 		for(String[] item : examList){
 			if(item[5].trim().toLowerCase().equals("yes")){
@@ -99,7 +99,7 @@ public class Teacher {
 		return count;
 	}
 	
-	public int[] countRegistered(int period){	//registration per class as tuple (registered, total)
+	public int[] countRegistered(int period){	//registration per class as tuple (registered entries, total entries)
 		int[] count = new int[2];
 		for(String[] item : examList){
 			if(isInt(item[2]) && Integer.parseInt(item[2]) == period) {
@@ -148,6 +148,8 @@ public class Teacher {
 		
 		Font font = new Font();
 		font.setSize(12);
+		
+		//Header table for total overview
 		PdfPTable header = new PdfPTable(5);
 		header.setWidths(new float[] {15, 20, 4, 15, 4});
 		PdfPCell nameCell = createHeaderCell(name);
@@ -158,7 +160,7 @@ public class Teacher {
 		header.addCell(createHeaderCell("Total Students:"));
 		header.addCell(createHeaderCell(Integer.toString(examList.size())));
 		
-		PdfPTable table = new PdfPTable(6);
+		PdfPTable table = new PdfPTable(6);	//table for all items
 		table.setWidthPercentage(100);
 		table.setWidths(new float[] { 5, 18, 2, 10, 10, 3});
 		int currentPeriod = 0;
@@ -166,7 +168,7 @@ public class Teacher {
 		ArrayList<String[]> noPeriod = new ArrayList<String[]>();
 		
 		for(String[] item : examList){	//Adds all exam items as rows of their data
-			if(isInt(item[2]) && currentPeriod != Integer.parseInt(item[2])){	//if it's a new class, add an information header 
+			if(isInt(item[2]) && currentPeriod != Integer.parseInt(item[2])){	//if it's a new period, add an information header 
 				currentPeriod = Integer.parseInt(item[2]);
 				
 				int[] registered = countRegistered(currentPeriod);	//gets tuple per period (registered, total)
@@ -179,7 +181,7 @@ public class Teacher {
 				table.addCell(createHeaderCell(""));
 				
 	            table.completeRow();	//go to new row
-	            for(String data : item) {
+	            for(String data : item) {	//still have to add this item
 					table.addCell(new Paragraph(data,font));
 				}
 			}
@@ -193,7 +195,7 @@ public class Teacher {
 			}
             table.completeRow();	//go to new row
         }
-		for(String[] item : noPeriod) {
+		for(String[] item : noPeriod) {				//add all noPeriod items to the end
 			for(String data : item) {
 				table.addCell(new Paragraph(data,font));
 			}
@@ -227,10 +229,10 @@ public class Teacher {
 	public void sendEmail(String user, String pass, String customMessage) throws MessagingException, IOException, DocumentException{	//sends PDF w/ email
 		Properties prop = new Properties();
 		
-		String smtp = "smtp.gmail.com";
+		String smtp = "smtp.gmail.com";	//default smtp is gmail
 	    int port = 587;
 	    
-	    if(user.indexOf("@outlook.com") != -1 || user.indexOf("@hotmail.com") != -1) {
+	    if(user.indexOf("@outlook.com") != -1 || user.indexOf("@hotmail.com") != -1) {		//tries to choose smtp's based on email address
 	    	smtp = "smtp.live.com";
 	    }
 	    else if(user.indexOf("@yahoo.com") != -1){
